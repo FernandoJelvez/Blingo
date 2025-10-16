@@ -4,16 +4,56 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Lingdyo</title>
+	<style>
+		body {
+			margin: 0;
+			height: 100vh;
+		}
+		.top-nav ul {
+			height: auto;
+			list-style: none;
+			overflow: hidden;
+			padding: 30px;
+			display:block;
+			margin-top:0;
+		}
+		.top-nav {
+			background-color: whitesmoke;
+			background-image: linear-gradient(whitesmoke, slategrey);
+		}
+		.navbar-element {
+			display: inline-block;
+			padding-inline: 10px;
+		}
+		.navbar-element a {
+			text-decoration: none;
+			color: #000022;
+			font-size: 16px;
+		}
+		.content {
+			display: grid;
+			grid-template-columns: auto 400px;
+			padding: 0;
+		}
+	</style>
 </head>
 <body>
-	<nav style="height:auto; background-color: #ececed;">
-		<ul style="list-style: none; overflow: hidden; height:auto; display: block;padding: 10px;">
-			<li style="display: inline-block;"><a href="my/home">Home</a></li>
-			<li style="display: inline-block;"><a href="#courses">Course</a></li>
-			<li style="display: inline-block;"><a href="#dictionary">Dictionary</a></li>
+	<nav class="top-nav">
+		<ul>
+			<li class="navbar-element"><a href="my/home">Home</a></li>
+			<li class="navbar-element"><a href="#courses">Course</a></li>
+			<li class="navbar-element"><a href="#dictionary">Dictionary</a></li>
+			<li class="navbar-element" style="float: right;"><a href="#about">About</a></li>
 		</ul>
 	</nav>
-	<h1>Welcome to Lindyo</h1>
-	<p>currently this page is on construction and will be updated in the future</p>
+	<div class="content" style="margin: 10px; height: 100%;">
+		<div>
+			<h1>Welcome to Lindyo</h1>
+			<p>currently this page is on construction and will be updated in the future</p>
+		</div>
+		<div style="width: 400px;height: 70%; background-color: seagreen; border-radius: 20px 0px 0px 20px;">
+			<p>[PLACEHOLDER]</p>
+		</div>
+	</div>
 </body>
 </html>
