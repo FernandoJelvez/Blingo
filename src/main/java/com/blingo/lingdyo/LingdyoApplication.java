@@ -11,5 +11,4 @@ public class LingdyoApplication {
 		ConexionMySQL conn = new ConexionMySQL();
 		conn.tablasBase();
 	}
-
 }
