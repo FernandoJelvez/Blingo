@@ -2,21 +2,21 @@ package com.blingo.lingdyo;
 import java.sql.*;
 
 public class ConexionMySQL {
-    //NOTA: No conectara si no creas la base de datos local, ve a tu MySQL y usa "CREATE database if not exists lingdyo"
-    private String URL = "jdbc:mysql://localhost:3306/lingdyo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-    private String USER = "root";
-    private String PASSWORD = "1q2w3e4r";
-    private Connection CONN;
-    /*
-    Modifica USER y PASSWORD si lo necesitas para poder conectarte a tu base de datos local
-     */
+    private final Connection CONN;
+
     public ConexionMySQL() {
         this.CONN = conectarSQL();
     }
+    //Modifica USER y PASSWORD si lo necesitas
+    //para poder conectarte a tu base de datos local ↓
     public Connection conectarSQL() {
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            //NOTA: No conectara si no creas la base de datos local, ve a tu MySQL y usa "CREATE database if not exists lingdyo"
+            String sqlURL = "jdbc:mysql://localhost:3306/lingdyo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+            String sqlUSER = "root";
+            String sqlPASSWORD = "1q2w3e4r";
+            conn = DriverManager.getConnection(sqlURL, sqlUSER, sqlPASSWORD);
             System.out.println("Conectado a MySQL");}
         catch (SQLException e) {
             System.err.println("Error conectando a MySQL-Lingdyo:\n" + e.getMessage());}
