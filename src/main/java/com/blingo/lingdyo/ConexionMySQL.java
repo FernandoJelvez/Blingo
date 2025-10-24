@@ -1,25 +1,22 @@
 package com.blingo.lingdyo;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class ConexionMySQL {
-    //NOTA: No conectara si no creas la base de datos local, ve a tu MySQL y usa "CREATE database if not exists lingdyo"
-    private String URL = "jdbc:mysql://localhost:3306/lingdyo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-    private String USER = "root";
-    private String PASSWORD = "1q2w3e4r";
-    private Connection CONN;
-    /*
-    Modifica USER y PASSWORD si lo necesitas para poder conectarte a tu base de datos local
-     */
+    private final Connection CONN;
+
     public ConexionMySQL() {
         this.CONN = conectarSQL();
     }
+    //Modifica USER y PASSWORD si lo necesitas
+    //para poder conectarte a tu base de datos local ↓
     public Connection conectarSQL() {
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            //NOTA: No conectara si no creas la base de datos local, ve a tu MySQL y usa "CREATE database if not exists lingdyo"
+            String sqlURL = "jdbc:mysql://localhost:3306/lingdyo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+            String sqlUSER = "root";
+            String sqlPASSWORD = "1q2w3e4r";
+            conn = DriverManager.getConnection(sqlURL, sqlUSER, sqlPASSWORD);
             System.out.println("Conectado a MySQL");}
         catch (SQLException e) {
             System.err.println("Error conectando a MySQL-Lingdyo:\n" + e.getMessage());}
@@ -28,12 +25,11 @@ public class ConexionMySQL {
 
     public boolean crearTabla(String SQL,String nombre){
         boolean error = false;
-        try {
-            CONN.createStatement().execute(SQL);
-        } catch (SQLException e) {
+        try (Statement state = CONN.createStatement()) {
+            state.execute(SQL);}
+        catch (SQLException e) {
             System.err.println("Error al crear la tabla "+nombre+": \n" + e.getMessage());
-            error = true;
-        }
+            error = true;}
         return error;
     }
     public void tablasBase(){
@@ -121,47 +117,40 @@ public class ConexionMySQL {
 
     public void addUser(String name, String pssw){
         String insert = "INSERT INTO users (name, password) VALUES (?,?)";
-        try {
-            PreparedStatement values = CONN.prepareStatement(insert);
+        try (PreparedStatement values = CONN.prepareStatement(insert)) {
             values.setString(1,name);
             values.setString(2,pssw);
             values.execute();
-            System.out.println("Usuario agregado correctamente.");
-        }
+            System.out.println("Usuario agregado correctamente.");}
         catch (SQLException e) {
             System.err.println("Error agregando usuario:\n" + e.getMessage());}
     }
     public void addCourse(int user_id, String name, String description){
         String insert = "INSERT INTO courses (user_id, name, description) VALUES (?,?,?)";
-        try {
-            PreparedStatement values = CONN.prepareStatement(insert);
+        try (PreparedStatement values = CONN.prepareStatement(insert)) {
             values.setInt(1,user_id);
             values.setString(2,name);
             values.setString(3,description);
             values.execute();
-            System.out.println("Curso agregado correctamente.");
-        }
+            System.out.println("Curso agregado correctamente.");}
         catch (SQLException e) {
             System.err.println("Error agregando curso:\n" + e.getMessage());}
     }
     public void addSentence(int user_id, int course_id, String name, String description){
         String insert = "INSERT INTO sentences (user_id, course_id, name, description) VALUES (?,?,?,?)";
-        try {
-            PreparedStatement values = CONN.prepareStatement(insert);
+        try (PreparedStatement values = CONN.prepareStatement(insert)) {
             values.setInt(1,user_id);
             values.setInt(2,course_id);
             values.setString(3,name);
             values.setString(4,description);
             values.execute();
-            System.out.println("Frase agregado correctamente.");
-        }
+            System.out.println("Frase agregado correctamente.");}
         catch (SQLException e) {
             System.err.println("Error agregando frase:\n" + e.getMessage());}
     }
     public void addEsercise(int user_id, int sentence_id, String name, String description){
         String insert = "INSERT INTO exercises (user_id, sentence_id, name, description) VALUES (?,?,?,?)";
-        try {
-            PreparedStatement values = CONN.prepareStatement(insert);
+        try (PreparedStatement values = CONN.prepareStatement(insert)) {
             values.setInt(1,user_id);
             values.setInt(2,sentence_id);
             values.setString(3,name);
@@ -174,8 +163,7 @@ public class ConexionMySQL {
     }
     public void addWord(int user_id, String name){
         String insert = "INSERT INTO words (user_id, name) VALUES (?,?)";
-        try {
-            PreparedStatement values = CONN.prepareStatement(insert);
+        try (PreparedStatement values = CONN.prepareStatement(insert)) {
             values.setInt(1,user_id);
             values.setString(2,name);
             values.execute();
@@ -186,8 +174,7 @@ public class ConexionMySQL {
     }
     public void addMeaning(int word_id, String description){
         String insert = "INSERT INTO meanings (word_id, description) VALUES (?,?)";
-        try {
-            PreparedStatement values = CONN.prepareStatement(insert);
+        try (PreparedStatement values = CONN.prepareStatement(insert)) {
             values.setInt(1,word_id);
             values.setString(2,description);
             values.execute();
