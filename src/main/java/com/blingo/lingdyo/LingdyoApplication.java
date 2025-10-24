@@ -8,7 +8,5 @@ public class LingdyoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LingdyoApplication.class, args);
-		ConexionMySQL conn = new ConexionMySQL();
-		conn.tablasBase();
 	}
 }
