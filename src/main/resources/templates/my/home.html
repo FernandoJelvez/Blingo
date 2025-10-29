@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="us">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lingdyo Home</title>
+    <style>
+        .alan-sans-title {
+          font-family: "Alan Sans", sans-serif;
+          font-optical-sizing: auto;
+          font-weight: 500;
+          font-style: normal;
+        }
+
+        .inconsolata-body {
+            font-family: "Inconsolata", monospace;
+            font-optical-sizing: auto;
+            font-weight: <weight>;
+            font-style: normal;
+            font-variation-settings:
+            "wdth" 100;
+            font-size: 22px;
+        }
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow:hidden
+        }
+        .top-nav ul {
+            height: auto;
+            list-style: none;
+            overflow: hidden;
+            display:block;
+            margin:0 10px 0 10px;
+        }
+        .top-nav {
+            position: fixed 0 0;
+            background-color: whitesmoke;
+            background-image: linear-gradient(whitesmoke, slategrey);
+            border-radius: 0 0 50px 50px;
+            overflow: hidden;
+            height: auto;
+            border-style: none none solid;
+            border-color:#123f6e;
+            border-width: 4px;
+            height: auto;
+        }
+        .navbar-element {
+            margin: 0;
+        }
+        .navbar-element a{
+            padding: 30px 10px;
+            float:left;
+            display: block;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .navbar-element:not(.current-page) a {
+            color: #000022;
+        }
+        .content {
+            display: grid;
+            grid-template-columns: auto 400px;
+            padding: 0;
+            margin: 10px 0 0 0;
+            height: 85%
+        }
+        .navbar-element a:hover {
+            background-color: #f5f5f550;
+        }
+        .navbar-element a:active {
+            box-shadow: inset 0px 4px 5px #000;
+        }
+        .current-page a{
+            color: #00f;
+            text-shadow: #22f 1px 0 5px;
+        }
+        .sidebar {
+            width: 400px;
+            height: 100%;
+            background-image: linear-gradient(242deg, #05B286,#00FFFF,#05B286);
+            border-style: solid none;
+            border-width: 2px;
+            border-color: #223;
+            border-radius: 20px 0px 0px 20px;
+            padding-inline: 10px;
+            box-shadow: 0px 3px 10px;
+            display: grid;
+            grid-template-rows: 80px auto 240px;
+            grid-template-areas:
+            "hd"
+            "brd"
+            "pfb";
+        }
+        .main-content {
+            margin: 10px;
+            overflow-y: scroll;
+        }
+        .language-banner {
+            margin-top: 5px;
+            color: #0D9C92;
+            height: 30px;
+        }
+        .sidebar hr {
+            grid-area: hd;
+        }
+        .language-banner {
+            grid-area: hd;
+        }
+        .board {
+            grid-area: brd;
+        }
+        .profile-box {
+            grid-area: pfb;
+        }
+        .board {
+            width: 90%;
+            height: 90%;
+            background-color:whitesmoke;
+            border-radius: 25px;
+            padding: 10px;
+            background-color: #0000;
+            border-color: #0D9C92;
+            border-style: solid;
+        }
+        .profile-box {
+            margin-top: 10%;
+            display: flex;
+        }
+        .profile-link {
+            background-color: #0000;
+            border-radius: 25px;
+            border-color: #0D9C92;
+            border-style: solid;
+            padding: 10px;
+            height: 72%;
+            width: 90%;
+            color: #0D9CFF;
+            text-decoration: none;
+        }
+        .profile-link div {
+            display: flex;
+        }
+
+    </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Alan+Sans&amp;family=Inconsolata:wght@200..900&amp;display=swap" rel="stylesheet">
+</head>
+<body>
+<nav class="top-nav">
+    <ul>
+        <li class="navbar-element alan-sans-title current-page"><a href="/my/home">Home</a></li>
+        <li class="navbar-element alan-sans-title"><a href="/courses">Courses</a></li>
+        <li class="navbar-element alan-sans-title"><a href="/dictionary">Dictionary</a></li>
+        <li class="navbar-element alan-sans-title" style="float: right;"><a href="/about">About</a></li>
+    </ul>
+</nav>
+<div class="content">
+    <div class="main-content">
+        <h1 class="alan-sans-title" style="color: #11467F;">Welcome to Lingdyo</h1>
+        <p class="inconsolata-body">Lingdyo is a cooperative Language Learning Platform where you can learn a language at the same time
+            you work with other to teach a language you already know, there's no pressure to do both, you are the one who
+            chooses what to do</p>
+    </div>
+    <div class="sidebar">
+        <header class="language-banner alan-sans-title"><p>Current language: None</p><hr style="border-color: #0D9C92" /></header>
+        <div class="board">
+            <h3 class="alan-sans-title" style="color:#000020">Nothing to show yet</h3>
+        </div>
+        <div class="profile-box" style="">
+            <a class="alan-sans-title profile-link" href="/login"><div>
+                <img th:src="@{images/no_user.png}" height="144px" width="144px">
+                <p style="margin: 50px;">Log in / Sign up</p>
+            </div></a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
