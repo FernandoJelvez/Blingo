@@ -2,10 +2,10 @@ package com.blingo.lingdyo;
 import java.sql.*;
 
 public class ConexionMySQL {
-    private final Connection CONN;
+    private final Connection conn;
 
     public ConexionMySQL() {
-        this.CONN = conectarSQL();
+        this.conn = conectarSQL();
     }
     //Modifica USER y PASSWORD si lo necesitas
     //para poder conectarte a la db ↓
@@ -24,7 +24,7 @@ public class ConexionMySQL {
     }
 
     public boolean crearTabla(String SQL,String nombre, Boolean error){
-        try (Statement state = CONN.createStatement()) {
+        try (Statement state = conn.createStatement()) {
             state.execute(SQL);}
         catch (SQLException e) {
             System.err.println("Error al crear la tabla "+nombre+": \n" + e.getMessage());
@@ -35,8 +35,8 @@ public class ConexionMySQL {
         boolean error = false;
         /*Las id foraneas de User en tablas no relacionales son para
         diferenciar su creador.*/
-        //Users
-        {String users = """
+
+        String users = """
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(15) NOT NULL,
@@ -46,16 +46,16 @@ public class ConexionMySQL {
                 email VARCHAR(50),
                 native_tonge VARCHAR(50)
             )
-        """; error = crearTabla(users,"users", error);}
-        //Languages
-        {String languages = """
+        """; error = crearTabla(users,"users", error);
+
+        String languages = """
             CREATE TABLE IF NOT EXISTS languages (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(15)
             )
-        """; error = crearTabla(languages,"languages",error);}
-        //Courses
-        {String courses = """
+        """; error = crearTabla(languages,"languages",error);
+
+        String courses = """
             CREATE TABLE IF NOT EXISTS courses (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -66,9 +66,9 @@ public class ConexionMySQL {
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (language_id) REFERENCES languages(id)
             )
-        """; error = crearTabla(courses,"courses", error);}
-        //Contributions
-        {String contributions = """
+        """; error = crearTabla(courses,"courses", error);
+
+        String contributions = """
             CREATE TABLE IF NOT EXISTS contributions (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -78,9 +78,9 @@ public class ConexionMySQL {
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (course_id) REFERENCES courses(id)
             )
-        """; error = crearTabla(contributions,"contributions", error);}
-        //Exercises
-        {String exercises = """
+        """; error = crearTabla(contributions,"contributions", error);
+
+        String exercises = """
             CREATE TABLE IF NOT EXISTS exercises (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -89,9 +89,9 @@ public class ConexionMySQL {
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (course_id) REFERENCES courses(id)
             )
-        """; error = crearTabla(exercises,"exercises", error);}
-        //Sentences
-        {String sentences = """
+        """; error = crearTabla(exercises,"exercises", error);
+
+        String sentences = """
             CREATE TABLE IF NOT EXISTS sentences (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -101,19 +101,19 @@ public class ConexionMySQL {
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (language_id) REFERENCES languages(id)
             )
-        """; error = crearTabla(sentences,"sentences", error);}
-        //Words
-        {String words = """
+        """; error = crearTabla(sentences,"sentences", error);
+
+        String words = """
             CREATE TABLE IF NOT EXISTS words (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 language_id INT NOT NULL,
                 content VARCHAR(50) NOT NULL,
                 FOREIGN KEY (language_id) REFERENCES languages(id)
             )
-        """; error = crearTabla(words,"words", error);}
+        """; error = crearTabla(words,"words", error);
+
 //Tablas relacionales (N-M)
-        //Users_Courses
-        {String users_courses = """
+        String users_courses = """
             CREATE TABLE IF NOT EXISTS users_courses (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -121,9 +121,9 @@ public class ConexionMySQL {
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (course_id) REFERENCES courses(id)
             )
-        """; error = crearTabla(users_courses, "users_courses", error);}
-        //Exercises_Sentences
-        {String exercises_sentences = """
+        """; error = crearTabla(users_courses, "users_courses", error);
+
+        String exercises_sentences = """
             CREATE TABLE IF NOT EXISTS exercises_sentences (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 exercise_id INT NOT NULL,
@@ -131,9 +131,9 @@ public class ConexionMySQL {
                 FOREIGN KEY (exercise_id) REFERENCES exercises(id),
                 FOREIGN KEY (sentence_id) REFERENCES sentences(id)
             )
-        """; error = crearTabla(exercises_sentences,"exercoses_sentences", error);}
-        //Sentences_Words
-        {String sentences_words = """
+        """; error = crearTabla(exercises_sentences,"exercoses_sentences", error);
+
+        String sentences_words = """
             CREATE TABLE IF NOT EXISTS sentences_words (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 sentence_id INT NOT NULL,
@@ -141,9 +141,9 @@ public class ConexionMySQL {
                 FOREIGN KEY (sentence_id) REFERENCES sentences(id),
                 FOREIGN KEY (word_id) REFERENCES words(id)
             )
-        """; error = crearTabla(sentences_words,"sentences_words", error);}
-        //translates_as
-        {String translates_as = """
+        """; error = crearTabla(sentences_words,"sentences_words", error);
+
+        String translates_as = """
             CREATE TABLE IF NOT EXISTS translates_as (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 word1_id INT NOT NULL,
@@ -151,7 +151,7 @@ public class ConexionMySQL {
                 FOREIGN KEY (word1_id) REFERENCES words(id),
                 FOREIGN KEY (word2_id) REFERENCES words(id)
             )
-        """; error = crearTabla(translates_as,"translates_as", error);}
+        """; error = crearTabla(translates_as,"translates_as", error);
 
 //Notificar por consola en caso de no haber errores.
         if(!error){
@@ -161,7 +161,7 @@ public class ConexionMySQL {
 
     public void addUser(String name, String pssw){
         String insert = "INSERT INTO users (name, password) VALUES (?,?)";
-        try (PreparedStatement values = CONN.prepareStatement(insert)) {
+        try (PreparedStatement values = conn.prepareStatement(insert)) {
             values.setString(1,name);
             values.setString(2,pssw);
             values.execute();
@@ -171,7 +171,7 @@ public class ConexionMySQL {
     }
     public void addCourse(int user_id, String name, String description){
         String insert = "INSERT INTO courses (user_id, name, description) VALUES (?,?,?)";
-        try (PreparedStatement values = CONN.prepareStatement(insert)) {
+        try (PreparedStatement values = conn.prepareStatement(insert)) {
             values.setInt(1,user_id);
             values.setString(2,name);
             values.setString(3,description);
@@ -182,7 +182,7 @@ public class ConexionMySQL {
     }
     public void addSentence(int user_id, int course_id, String name, String description){
         String insert = "INSERT INTO sentences (user_id, course_id, name, description) VALUES (?,?,?,?)";
-        try (PreparedStatement values = CONN.prepareStatement(insert)) {
+        try (PreparedStatement values = conn.prepareStatement(insert)) {
             values.setInt(1,user_id);
             values.setInt(2,course_id);
             values.setString(3,name);
@@ -194,7 +194,7 @@ public class ConexionMySQL {
     }
     public void addEsercise(int user_id, int sentence_id, String name, String description){
         String insert = "INSERT INTO exercises (user_id, sentence_id, name, description) VALUES (?,?,?,?)";
-        try (PreparedStatement values = CONN.prepareStatement(insert)) {
+        try (PreparedStatement values = conn.prepareStatement(insert)) {
             values.setInt(1,user_id);
             values.setInt(2,sentence_id);
             values.setString(3,name);
@@ -207,7 +207,7 @@ public class ConexionMySQL {
     }
     public void addWord(int user_id, String name){
         String insert = "INSERT INTO words (user_id, name) VALUES (?,?)";
-        try (PreparedStatement values = CONN.prepareStatement(insert)) {
+        try (PreparedStatement values = conn.prepareStatement(insert)) {
             values.setInt(1,user_id);
             values.setString(2,name);
             values.execute();
@@ -218,7 +218,7 @@ public class ConexionMySQL {
     }
     public void addMeaning(int word_id, String description){
         String insert = "INSERT INTO meanings (word_id, description) VALUES (?,?)";
-        try (PreparedStatement values = CONN.prepareStatement(insert)) {
+        try (PreparedStatement values = conn.prepareStatement(insert)) {
             values.setInt(1,word_id);
             values.setString(2,description);
             values.execute();
