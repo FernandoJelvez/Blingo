@@ -8,14 +8,14 @@ public class ConexionMySQL {
         this.CONN = conectarSQL();
     }
     //Modifica USER y PASSWORD si lo necesitas
-    //para poder conectarte a tu base de datos local ↓
+    //para poder conectarte a la db ↓
     public Connection conectarSQL() {
         Connection conn = null;
         try {
-            //NOTA: No conectara si no creas la base de datos local, ve a tu MySQL y usa "CREATE database if not exists lingdyo"
-            String sqlURL = "jdbc:mysql://localhost:3306/lingdyo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-            String sqlUSER = "root";
-            String sqlPASSWORD = "1q2w3e4r";
+            //ADVERTENCIA: Me falta un comentario completo para agregar la database de blingo
+            String sqlURL = "jdbc:mysql://localhost:3306/blingo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+            String sqlUSER = "blingo";
+            String sqlPASSWORD = "#ABcde00";
             conn = DriverManager.getConnection(sqlURL, sqlUSER, sqlPASSWORD);
             System.out.println("Conectado a MySQL");}
         catch (SQLException e) {
@@ -23,8 +23,7 @@ public class ConexionMySQL {
         return conn;
     }
 
-    public boolean crearTabla(String SQL,String nombre){
-        boolean error = false;
+    public boolean crearTabla(String SQL,String nombre, Boolean error){
         try (Statement state = CONN.createStatement()) {
             state.execute(SQL);}
         catch (SQLException e) {
@@ -34,71 +33,107 @@ public class ConexionMySQL {
     }
     public void tablasBase(){
         boolean error = false;
-
-        String users = """
+        /*Las id foraneas de User en tablas no relacionales son para
+        diferenciar su creador.*/
+        //Users
+        {String users = """
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(50) NOT NULL,
-                password VARCHAR(12)
+                name VARCHAR(15) NOT NULL,
+                lastname VARCHAR(15) NOT NULL,
+                age INT NOT NULL,
+                description VARCHAR(100),
+                email VARCHAR(50),
+                native_tonge VARCHAR(50)
             )
-        """; error = crearTabla(users,"users");
-
-        String courses = """
+        """; error = crearTabla(users,"users", error);}
+        //Languages
+        {String languages = """
+            CREATE TABLE IF NOT EXISTS languages (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(15)
+            )
+        """; error = crearTabla(languages,"languages",error);}
+        //Courses
+        {String courses = """
             CREATE TABLE IF NOT EXISTS courses (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
+                language_id INT NOT NULL,
                 name VARCHAR(50) NOT NULL,
-                description VARCHAR(100),
                 likes INT DEFAULT 0,
-                FOREIGN KEY (user_id) REFERENCES users(id)
+                level VARCHAR(50),
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                FOREIGN KEY (language_id) REFERENCES languages(id)
             )
-        """; error = crearTabla(courses,"courses");
-
-        String sentences = """
-            CREATE TABLE IF NOT EXISTS sentences (
+        """; error = crearTabla(courses,"courses", error);}
+        //Contributions
+        {String contributions = """
+            CREATE TABLE IF NOT EXISTS contributions (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
                 course_id INT NOT NULL,
-                name VARCHAR(50) NOT NULL,
-                description VARCHAR(100),
+                type VARCHAR(15) NOT NULL,
+                date DATE DEFAULT (CURRENT_DATE()),
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                FOREIGN KEY (course_id) REFERENCES courses(id)
+            )
+        """; error = crearTabla(contributions,"contributions", error);}
+        //Exercises
+        {String exercises = """
+            CREATE TABLE IF NOT EXISTS exercises (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                course_id INT NOT NULL,
                 likes INT DEFAULT 0,
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (course_id) REFERENCES courses(id)
             )
-        """; error = crearTabla(sentences,"sentences");
-
-        String exercises = """
-            CREATE TABLE IF NOT EXISTS exercises (
+        """; error = crearTabla(exercises,"exercises", error);}
+        //Sentences
+        {String sentences = """
+            CREATE TABLE IF NOT EXISTS sentences (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
-                sentence_id INT NOT NULL,
-                name VARCHAR(50) NOT NULL,
-                description VARCHAR(100),
+                language_id INT NOT NULL,
+                content VARCHAR(100) NOT NULL,
                 likes INT DEFAULT 0,
                 FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (sentence_id) REFERENCES sentences(id)
+                FOREIGN KEY (language_id) REFERENCES languages(id)
             )
-        """; error = crearTabla(exercises,"exercises");
-
-        String words = """
+        """; error = crearTabla(sentences,"sentences", error);}
+        //Words
+        {String words = """
             CREATE TABLE IF NOT EXISTS words (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
-                name VARCHAR(50) NOT NULL,
-                FOREIGN KEY (user_id) REFERENCES users(id)
+                language_id INT NOT NULL,
+                content VARCHAR(50) NOT NULL,
+                FOREIGN KEY (language_id) REFERENCES languages(id)
             )
-        """; error = crearTabla(words,"words");
-
-        String meanings = """
-            CREATE TABLE IF NOT EXISTS meanings (
+        """; error = crearTabla(words,"words", error);}
+//Tablas relacionales (N-M)
+        //Users_Courses
+        {String users_courses = """
+            CREATE TABLE IF NOT EXISTS users_courses (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                word_id INT NOT NULL,
-                description VARCHAR(100) NOT NULL,
-                FOREIGN KEY (word_id) REFERENCES words(id)
+                user_id INT NOT NULL,
+                course_id INT NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                FOREIGN KEY (course_id) REFERENCES courses(id)
             )
-        """; error = crearTabla(meanings,"meanings");
-//Tablas relacionales
-        String sentences_words = """
+        """; error = crearTabla(users_courses, "users_courses", error);}
+        //Exercises_Sentences
+        {String exercises_sentences = """
+            CREATE TABLE IF NOT EXISTS exercises_sentences (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                exercise_id INT NOT NULL,
+                sentence_id INT NOT NULL,
+                FOREIGN KEY (exercise_id) REFERENCES exercises(id),
+                FOREIGN KEY (sentence_id) REFERENCES sentences(id)
+            )
+        """; error = crearTabla(exercises_sentences,"exercoses_sentences", error);}
+        //Sentences_Words
+        {String sentences_words = """
             CREATE TABLE IF NOT EXISTS sentences_words (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 sentence_id INT NOT NULL,
@@ -106,13 +141,22 @@ public class ConexionMySQL {
                 FOREIGN KEY (sentence_id) REFERENCES sentences(id),
                 FOREIGN KEY (word_id) REFERENCES words(id)
             )
-        """; error = crearTabla(sentences_words,"sentences_words");
+        """; error = crearTabla(sentences_words,"sentences_words", error);}
+        //translates_as
+        {String translates_as = """
+            CREATE TABLE IF NOT EXISTS translates_as (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                word1_id INT NOT NULL,
+                word2_id INT NOT NULL,
+                FOREIGN KEY (word1_id) REFERENCES words(id),
+                FOREIGN KEY (word2_id) REFERENCES words(id)
+            )
+        """; error = crearTabla(translates_as,"translates_as", error);}
 
+//Notificar por consola en caso de no haber errores.
         if(!error){
             System.out.println("""
-                    -Tablas: users, courses, sentences
-                    exercises, words, meanings y sentences_words.
-                    -Creadas existosamente.""");}
+                    -Tablas creadas existosamente.""");}
     }
 
     public void addUser(String name, String pssw){
