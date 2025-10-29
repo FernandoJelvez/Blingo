@@ -5,9 +5,26 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Lingdyo</title>
 	<style>
+		.alan-sans-title {
+		  font-family: "Alan Sans", sans-serif;
+		  font-optical-sizing: auto;
+		  font-weight: 500;
+		  font-style: normal;
+		}
+
+		.inconsolata-body {
+			font-family: "Inconsolata", monospace;
+			font-optical-sizing: auto;
+			font-weight: <weight>;
+			font-style: normal;
+			font-variation-settings:
+			"wdth" 100;
+			font-size: 22px;
+		}
 		body {
 			margin: 0;
 			height: 100vh;
+			overflow:hidden
 		}
 		.top-nav ul {
 			height: auto;
@@ -31,18 +48,22 @@
 		.navbar-element {
 			margin: 0;
 		}
-		.navbar-element a {
+		.navbar-element a{
 			padding: 30px 10px;
 			float:left;
 			display: block;
 			text-decoration: none;
-			color: #000022;
 			font-size: 16px;
+		}
+		.navbar-element:not(.current-page) a {
+			color: #000022;
 		}
 		.content {
 			display: grid;
 			grid-template-columns: auto 400px;
 			padding: 0;
+			margin: 10px 0 0 0;
+			height: 85%
 		}
 		.navbar-element a:hover {
 			background-color: #f5f5f550;
@@ -50,29 +71,50 @@
 		.navbar-element a:active {
 			box-shadow: inset 0px 4px 5px #000;
 		}
-		.current-page {
-			box-shadow: inset 0px 4px 5px #000;
+		.current-page a{
+			color: #00f;
+			text-shadow: #22f 1px 0 5px;
 		}
+		.sidebar {
+			width: 400px;
+			height: 100%;
+			background-image: linear-gradient(242deg, #05B286,#00FFFF,#05B286);
+			border-style: solid none;
+			border-width: 2px;
+			border-color: #223;
+			border-radius: 20px 0px 0px 20px;
+			padding-inline: 10px;
+			box-shadow: 0px 3px 10px;
+		}
+		.main-content {
+			margin: 10px;
+			overflow-y: scroll;
+		}
+
 	</style>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+	<link href="https://fonts.googleapis.com/css2?family=Alan+Sans&amp;family=Inconsolata:wght@200..900&amp;display=swap" rel="stylesheet">
 </head>
 <body>
 	<nav class="top-nav">
 		<ul>
-			<li class="navbar-element"><a href="/my/home">Home</a></li>
-			<li class="navbar-element"><a href="/courses">Courses</a></li>
-			<li class="navbar-element"><a href="/dictionary">Dictionary</a></li>
-			<li class="navbar-element" style="float: right;"><a href="/about">About</a></li>
+			<li class="navbar-element alan-sans-title"><a href="/my/home">Home</a></li>
+			<li class="navbar-element alan-sans-title"><a href="/courses">Courses</a></li>
+			<li class="navbar-element alan-sans-title"><a href="/dictionary">Dictionary</a></li>
+			<li class="navbar-element alan-sans-title" style="float: right;"><a href="/about">About</a></li>
 		</ul>
 	</nav>
-	<div class="content" style="margin: 10px; height: 100%;">
-		<div>
-			<h1>Welcome to Lingdyo</h1>
-			<p>Lingdyo is a cooperative Language Learning Platform where you can learn a language at the same time
+	<div class="content">
+		<div class="main-content">
+			<h1 class="alan-sans-title" style="color: #11467F;">Welcome to Lingdyo</h1>
+			<p class="inconsolata-body">Lingdyo is a cooperative Language Learning Platform where you can learn a language at the same time
             you work with other to teach a language you already know, there's no pressure to do both, you are the one who
             chooses what to do</p>
 		</div>
-		<div style="width: 400px;height: 70%; background-color: seagreen; border-radius: 20px 0px 0px 20px;">
-			<p><a href="/signup">Sign up</a></p>
+		<div class="sidebar">
+			<p><a class="alan-sans-title" href="/signup">Sign up</a></p>
 		</div>
 	</div>
 </body>
