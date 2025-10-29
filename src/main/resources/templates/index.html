@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" lang="us">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -85,10 +85,61 @@
 			border-radius: 20px 0px 0px 20px;
 			padding-inline: 10px;
 			box-shadow: 0px 3px 10px;
+			display: grid;
+			grid-template-rows: 80px auto 240px;
+			grid-template-areas: 
+			"hd"
+			"brd"
+			"pfb";
 		}
 		.main-content {
 			margin: 10px;
 			overflow-y: scroll;
+		}
+		.language-banner {
+			margin-top: 5px;
+			color: #0D9C92;
+			height: 30px;
+		}
+		.sidebar hr {
+			grid-area: hd;
+		}
+		.language-banner {
+			grid-area: hd;
+		}
+		.board {
+			grid-area: brd;
+		}
+		.profile-box {
+			grid-area: pfb;
+		}
+		.board {
+			width: 90%;
+			height: 90%;
+			background-color:whitesmoke;
+			border-radius: 25px;
+			padding: 10px;
+			background-color: #0000;
+			border-color: #0D9C92;
+			border-style: solid;
+		}
+		.profile-box {
+			margin-top: 10%;
+			display: flex;
+		}
+		.profile-link {
+			background-color: #0000;
+			border-radius: 25px;
+			border-color: #0D9C92;
+			border-style: solid;
+			padding: 10px;
+			height: 72%;
+			width: 90%;
+			color: #0D9CFF;
+			text-decoration: none;
+		}
+		.profile-link div {
+			display: flex;
 		}
 
 	</style>
@@ -114,7 +165,16 @@
             chooses what to do</p>
 		</div>
 		<div class="sidebar">
-			<p><a class="alan-sans-title" href="/signup">Sign up</a></p>
+			<header class="language-banner alan-sans-title"><p>Current language: None</p><hr style="border-color: #0D9C92" /></header>
+			<div class="board">
+				<h3 class="alan-sans-title" style="color:#000020">Nothing to show yet</h3>
+			</div>
+			<div class="profile-box" style="">
+				<a class="alan-sans-title profile-link" href="/login"><div>
+					<img th:src="@{images/no_user.png}" height="144px" width="144px">
+					<p style="margin: 50px;">Log in / Sign up</p>
+				</div></a>
+			</div>
 		</div>
 	</div>
 </body>
