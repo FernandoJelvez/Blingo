@@ -1,4 +1,6 @@
 package com.blingo.lingdyo;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.sql.*;
 
 public class ConexionMySQL {
@@ -38,10 +40,11 @@ public class ConexionMySQL {
 
         String users = """
             CREATE TABLE IF NOT EXISTS users (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+                id VARCHAR(15) PRIMARY KEY,
+                pswd VARCHAR(255) NOT NULL,
                 name VARCHAR(15) NOT NULL,
                 lastname VARCHAR(15) NOT NULL,
-                age INT NOT NULL,
+                age INT,
                 description VARCHAR(100),
                 email VARCHAR(50),
                 native_tonge VARCHAR(50)
@@ -58,7 +61,7 @@ public class ConexionMySQL {
         String courses = """
             CREATE TABLE IF NOT EXISTS courses (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
+                user_id VARCHAR(15) NOT NULL,
                 language_id INT NOT NULL,
                 name VARCHAR(50) NOT NULL,
                 likes INT DEFAULT 0,
@@ -71,7 +74,7 @@ public class ConexionMySQL {
         String contributions = """
             CREATE TABLE IF NOT EXISTS contributions (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
+                user_id VARCHAR(15) NOT NULL,
                 course_id INT NOT NULL,
                 type VARCHAR(15) NOT NULL,
                 date DATE DEFAULT (CURRENT_DATE()),
@@ -83,7 +86,7 @@ public class ConexionMySQL {
         String exercises = """
             CREATE TABLE IF NOT EXISTS exercises (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
+                user_id VARCHAR(15) NOT NULL,
                 course_id INT NOT NULL,
                 likes INT DEFAULT 0,
                 FOREIGN KEY (user_id) REFERENCES users(id),
@@ -94,7 +97,7 @@ public class ConexionMySQL {
         String sentences = """
             CREATE TABLE IF NOT EXISTS sentences (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
+                user_id VARCHAR(15) NOT NULL,
                 language_id INT NOT NULL,
                 content VARCHAR(100) NOT NULL,
                 likes INT DEFAULT 0,
@@ -116,7 +119,7 @@ public class ConexionMySQL {
         String users_courses = """
             CREATE TABLE IF NOT EXISTS users_courses (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
+                user_id VARCHAR(15) NOT NULL,
                 course_id INT NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (course_id) REFERENCES courses(id)
@@ -159,16 +162,20 @@ public class ConexionMySQL {
                     -Tablas creadas existosamente.""");}
     }
 
-    public void addUser(String name, String pssw){
-        String insert = "INSERT INTO users (name, password) VALUES (?,?)";
+    public void addUser(String id, String pswd, String name, String lastname){
+        String insert = "INSERT INTO users (id, pswd, name, lastname) VALUES (?,?,?,?)";
+        String encode = new BCryptPasswordEncoder().encode(pswd);
         try (PreparedStatement values = conn.prepareStatement(insert)) {
-            values.setString(1,name);
-            values.setString(2,pssw);
+            values.setString(1,id);
+            values.setString(2,encode);
+            values.setString(3,name);
+            values.setString(4,lastname);
             values.execute();
             System.out.println("Usuario agregado correctamente.");}
         catch (SQLException e) {
             System.err.println("Error agregando usuario:\n" + e.getMessage());}
     }
+
     public void addCourse(int user_id, String name, String description){
         String insert = "INSERT INTO courses (user_id, name, description) VALUES (?,?,?)";
         try (PreparedStatement values = conn.prepareStatement(insert)) {
