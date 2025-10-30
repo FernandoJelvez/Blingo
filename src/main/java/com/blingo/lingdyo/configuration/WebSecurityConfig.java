@@ -25,6 +25,7 @@ public class WebSecurityConfig {
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .permitAll()
+                        .defaultSuccessUrl("/my/home")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
