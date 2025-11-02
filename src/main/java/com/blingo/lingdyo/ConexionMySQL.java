@@ -15,10 +15,10 @@ public class ConexionMySQL {
         Connection connection = null;
         try {
             //ADVERTENCIA: Me falta un comentario completo para agregar la database de blingo
-            String sqlURL = "jdbc:mysql://localhost:3306/blingo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-            String sqlUSER = "blingo";
-            String sqlPASSWORD = "#ABcde00";
-            connection = DriverManager.getConnection(sqlURL, sqlUSER, sqlPASSWORD);
+            String sqlUrl = "jdbc:mysql://localhost:3306/blingo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+            String sqlUser = "blingo";
+            String sqlPswd = "#ABcde00";
+            connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPswd);
             System.out.println("Conectado a MySQL");}
         catch (SQLException e) {
             System.err.println("Error conectando a MySQL-Lingdyo:\n" + e.getMessage());}
