@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!-- Lo agregué para usar algunas etiquetas de thymeleaf -->
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alan+Sans&family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+<head>
+	<title>Lingdyo login</title>
+	<style>
+		form {
+			display: grid;
+			width: 400px
+		}
+		input {
+			margin-bottom: 20px;
+			font-size:20px;
+		}
+		.form-box {
+			border-radius:100px /500px;
+			background-color: whitesmoke;
+			background-image: linear-gradient(whitesmoke, slategrey);
+			width:500px;
+			background-color: red;
+			padding: 20px;
+			border-color: #000010;
+			border-width: 2px;
+			border-style: solid;
+			display: flex;
+			justify-content: center;
+		}
+		.signup-box {
+		    height:800px;
+		    grid-template-rows: auto auto auto auto auto auto auto auto auto;
+		}
+		.form-page {
+			display: flex;
+			justify-content: center;
+		}
+		.submit-button {
+			background-color: #11467f;
+			color: azure;
+		}
+        .alan-sans-title {
+          font-family: "Alan Sans", sans-serif;
+          font-optical-sizing: auto;
+          font-weight: 500;
+          font-style: normal;
+        }
+
+        .inconsolata-body {
+            font-family: "Inconsolata", monospace;
+            font-optical-sizing: auto;
+            font-weight: <weight>;
+            font-style: normal;
+            font-variation-settings:
+            "wdth" 100;
+            font-size: 22px;
+        }
+	</style>
+</head>
+<body class="form-page">
+	<div class="signup-box form-box" style="">
+		<form action="/signup" method="POST">
+			<label class="alan-sans-title">Username</label>
+			<input style="background-color: #00000000; box-shadow: inset 0px 2px 5px" type="text" name="username" id="username">
+			<label class="alan-sans-title">Password</label>
+			<input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="password" name="password" id="password">
+            <label class="alan-sans-title">Name</label>
+            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="text" name="name" id="name">
+            <label class="alan-sans-title">Lastname</label>
+            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="text" name="lastname" id="lastname">
+            <label class="alan-sans-title">Age</label>
+            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="number" name="age" id="age">
+            <label class="alan-sans-title">Description</label>
+            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="text" name="description" id="description">
+            <label class="alan-sans-title">E-mail</label>
+            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="email" name="email" id="email">
+            <label class="alan-sans-title">Native tongue</label>
+            <select style="background-color: #00000000; box-shadow: inset 0px 2px 5px" name="native_tongue" id="native_tonge">
+                <option value="german">Deutsch</option>
+                <option value="english" selected>English</option>
+                <option value="spanish">Español</option>
+                <option value="french">Français</option>
+                <option value="italiano">Italiano</option>
+                <option value="portuguese">Português</option>
+            </select>
+
+
+			<!-- Este es el token para que no tener problemas con CSRF -->
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+			<input class = "submit-button alan-sans-title" style="box-shadow:0px 2px 5px #000" type="submit" name="submit" value="Sign up">
+			<p class="inconsolata-body">Already have an account? <a class="alan-sans-title" href="/login">Log in</a></p>
+			<!-- Esto solo se mostrará si hay algún error por parte del usuario en el login. -->
+			<div th:if="${param.error}">
+				<p style="color: red;">Usuario o contraseña incorrectos.</p>
+			</div>
+		</form>
+	</div>
+</body>
+</html>
