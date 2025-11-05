@@ -1,5 +1,6 @@
 package com.blingo.lingdyo;
 
+import com.blingo.lingdyo.annotations.ValidEmail;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -12,8 +13,9 @@ public class User {
     private String pswd;
     private String name;
     private String lastname;
-    private Integer age;
+    private Integer age = 0;
     private String description;
+    @ValidEmail
     private String email;
     private String native_tonge;
 

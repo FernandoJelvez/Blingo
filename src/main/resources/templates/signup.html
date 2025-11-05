@@ -60,36 +60,23 @@
 </head>
 <body class="form-page">
 	<div class="signup-box form-box" style="">
-		<form action="/signup" method="POST">
+		<form action="/signup" method="POST" th:object="${user}">
 			<label class="alan-sans-title">Username</label>
-			<input style="background-color: #00000000; box-shadow: inset 0px 2px 5px" type="text" name="username" id="username">
+			<input style="background-color: #00000000; box-shadow: inset 0px 2px 5px" type="text" name="username" id="username" th:field="*{id}">
 			<label class="alan-sans-title">Password</label>
-			<input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="password" name="password" id="password">
+			<input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="password" name="password" id="password" th:field="*{pswd}">
             <label class="alan-sans-title">Name</label>
-            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="text" name="name" id="name">
+            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="text" name="name" id="name" th:field="*{name}">
             <label class="alan-sans-title">Lastname</label>
-            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="text" name="lastname" id="lastname">
-            <label class="alan-sans-title">Age</label>
-            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="number" name="age" id="age">
-            <label class="alan-sans-title">Description</label>
-            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="text" name="description" id="description">
+            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="text" name="lastname" id="lastname" th:field="*{lastname}">
             <label class="alan-sans-title">E-mail</label>
-            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="email" name="email" id="email">
-            <label class="alan-sans-title">Native tongue</label>
-            <select style="background-color: #00000000; box-shadow: inset 0px 2px 5px" name="native_tongue" id="native_tonge">
-                <option value="german">Deutsch</option>
-                <option value="english" selected>English</option>
-                <option value="spanish">Español</option>
-                <option value="french">Français</option>
-                <option value="italiano">Italiano</option>
-                <option value="portuguese">Português</option>
-            </select>
-
+            <input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="email" name="email" id="email" th:field="*{email}">
+            <input class = "submit-button alan-sans-title" style="box-shadow:0px 2px 5px #000" type="submit" name="submit" value="Sign up">
 
 			<!-- Este es el token para que no tener problemas con CSRF -->
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-			<input class = "submit-button alan-sans-title" style="box-shadow:0px 2px 5px #000" type="submit" name="submit" value="Sign up">
+            <button type="submit">Sign Up</button>
 			<p class="inconsolata-body">Already have an account? <a class="alan-sans-title" href="/login">Log in</a></p>
 			<!-- Esto solo se mostrará si hay algún error por parte del usuario en el login. -->
 			<div th:if="${param.error}">

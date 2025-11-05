@@ -162,14 +162,15 @@ public class ConexionMySQL {
                     -Tablas creadas existosamente.""");}
     }
 
-    public void addUser(String id, String pswd, String name, String lastname){
-        String insert = "INSERT INTO users (id, pswd, name, lastname) VALUES (?,?,?,?)";
+    public void addUser(String id, String pswd, String name, String lastname,String email){
+        String insert = "INSERT INTO users (id, pswd, name, lastname,email) VALUES (?,?,?,?,?)";
         String encode = new BCryptPasswordEncoder().encode(pswd);
         try (PreparedStatement values = conn.prepareStatement(insert)) {
             values.setString(1,id);
             values.setString(2,encode);
             values.setString(3,name);
             values.setString(4,lastname);
+            values.setString(5,email);
             values.execute();
             System.out.println("Usuario agregado correctamente.");}
         catch (SQLException e) {
