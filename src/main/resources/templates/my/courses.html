@@ -142,18 +142,19 @@
             display: flex;
         }
         /*holo-display*/
-        /*.content-capsule { holoscreen
+        .content-capsule {
             border-radius: 25px 25px 0 0;
             padding:10px;
-            margin: 20px;
+            margin: 25px;
             border-style:none none solid;
+            background-image:radial-gradient(#00808080, #0000), repeating-linear-gradient(#00FFFF80,#00808080 1px);
             background-color: #00FFFF80;
             border-width: 25px;
             min-height: 75px;
             border-image: linear-gradient(whitesmoke, slategrey) 100;
             box-shadow: inset 0px 3px 10px #088,
             0px 3px 10px;
-        }*/
+        }
         /*glass*/
         /*.content-capsule {
             border-radius: 25px;
@@ -165,14 +166,14 @@
             0px 3px 10px;
         }*/
         /*round plastic*/
-        .content-capsule {
+        /*.content-capsule {
             border-radius: 25px;
-            padding:10px;
+            padding:25px 25px;
             margin: 20px;
             background-image: linear-gradient(whitesmoke 10%,#b9c0c8,slategrey 90%);
             min-height: 75px;
             box-shadow:0px 3px 5px;
-        }
+        }*/
     </style>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -194,8 +195,7 @@
         <p class="inconsolata-body">Lingdyo is a cooperative Language Learning Platform where you can learn a language at the same time
             you work with other to teach a language you already know, there's no pressure to do both, you are the one who
             chooses what to do</p>
-        <div class="content-capsule">
-            wow
+        <div id="enrolled-courses-list">
         </div>
     </div>
     <div class="sidebar">
@@ -217,21 +217,71 @@
         loadCoursesCapsules();
     }
     var courses;
-    function loadCoursesCapsules() {
-        fetch("/enrolled_courses?username=user").then(response =>{
-                console.log(response)
-                if (!response.ok) {
-                    console.log("ERROR")
-                    throw new Error(`HTTP error: ${response.status}`)
-                }
-                console.log("JSON:")
-                console.log(response.json())
-                return response.json;
+    async function loadCoursesCapsules() {
+        var courses;
+        const url = "/enrolled_courses?username=user"
+        try {
+            const response = await fetch(url);
+            if(!response.ok){
+                throw new Error(`Response status: ${response.status}`);
             }
-        )
-        console.log("final")
-        console.log(courses);
+            const result = await response.json();
+            console.log("forloop aproaching");
+            console.log("length: "+result.length);
+            for (var i = 0; i<result.length; i++){
+                console.log("forloop");
+                var r = result[i];
+                addEnrolledCourseCapsule(r.creator,r.name,r.likes,r.level,r.language);
+            }
+        } catch(error) {
+            console.log(error.message);
+        }
     }
+    function addEnrolledCourseCapsule(creator,name,likes,level,language){
+        var enrolledCoursesList = document.getElementById('enrolled-courses-list');
+        var courseCapsule = document.createElement("div");
+        var courseCapsuleClass = document.createAttribute("class");
+        var header = document.createElement("header");
+        var headerClass = document.createAttribute("class");
+        var courseTitle = document.createElement("h1");
+        var courseTitleClass = document.createAttribute("class");
+        var likesText = document.createElement("h4");
+        var likesTextClass = document.createAttribute("class");
+        var creatorFooter = document.createElement("footer");
+        var creatorFooterClass = document.createAttribute("class");
+        var creatorFooterStyle = document.createAttribute("style");
+
+        courseCapsuleClass.value = "content-capsule";
+        courseCapsule.setAttributeNode(courseCapsuleClass);
+
+        headerClass.value = "inconsolata-body";
+        header.setAttributeNode(headerClass);
+        header.textContent =  language + " - " + level
+
+        courseTitleClass.value = "alan-sans-title";
+        courseTitle.setAttributeNode(courseTitleClass);
+        courseTitle.textContent = name;
+
+        likesTextClass.value = "inconsolata-body";
+        likesText.setAttributeNode(likesTextClass);
+        likesText.textContent = likes + " Likes"
+
+        creatorFooterClass.value = "inconsolata-body";
+        creatorFooterStyle.value = "float: right; margin-top: 10px"
+        creatorFooter.setAttributeNode(creatorFooterClass);
+        creatorFooter.setAttributeNode(creatorFooterStyle);
+        creatorFooter.textContent = "Created by: " + creator;
+
+        courseCapsule.append(header);
+        courseCapsule.append(courseTitle);
+        courseCapsule.append(likesText);
+        courseCapsule.append(creatorFooter);
+        enrolledCoursesList.append(courseCapsule);
+
+
+        console.log("added");
+    }
+
 </script>
 </body>
 </html>
