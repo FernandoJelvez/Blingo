@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Lingdyo Home</title>
+    <title>My courses - Lingdyo</title>
     <style>
         .alan-sans-title {
           font-family: "Alan Sans", sans-serif;
@@ -141,7 +141,38 @@
         .profile-link div {
             display: flex;
         }
-
+        /*holo-display*/
+        /*.content-capsule { holoscreen
+            border-radius: 25px 25px 0 0;
+            padding:10px;
+            margin: 20px;
+            border-style:none none solid;
+            background-color: #00FFFF80;
+            border-width: 25px;
+            min-height: 75px;
+            border-image: linear-gradient(whitesmoke, slategrey) 100;
+            box-shadow: inset 0px 3px 10px #088,
+            0px 3px 10px;
+        }*/
+        /*glass*/
+        /*.content-capsule {
+            border-radius: 25px;
+            padding:10px;
+            margin: 20px;
+            background-color: #0000;
+            min-height: 75px;
+            box-shadow: inset 0px 3px 10px,
+            0px 3px 10px;
+        }*/
+        /*round plastic*/
+        .content-capsule {
+            border-radius: 25px;
+            padding:10px;
+            margin: 20px;
+            background-image: linear-gradient(whitesmoke 10%,#b9c0c8,slategrey 90%);
+            min-height: 75px;
+            box-shadow:0px 3px 5px;
+        }
     </style>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -151,23 +182,26 @@
 <body>
 <nav class="top-nav">
     <ul>
-        <li class="navbar-element alan-sans-title current-page"><a href="/my/home">Home</a></li>
-        <li class="navbar-element alan-sans-title"><a href="/my/courses">Courses</a></li>
+        <li class="navbar-element alan-sans-title"><a href="/my/home">Home</a></li>
+        <li class="navbar-element alan-sans-title current-page"><a href="/my/courses">Courses</a></li>
         <li class="navbar-element alan-sans-title"><a href="/dictionary">Dictionary</a></li>
         <li class="navbar-element alan-sans-title" style="float: right;"><a href="/about">About</a></li>
     </ul>
 </nav>
 <div class="content">
     <div class="main-content">
-        <h1 class="alan-sans-title" style="color: #11467F;">Welcome to Lingdyo</h1>
+        <h1 class="alan-sans-title" style="color: #11467F;">My courses</h1>
         <p class="inconsolata-body">Lingdyo is a cooperative Language Learning Platform where you can learn a language at the same time
             you work with other to teach a language you already know, there's no pressure to do both, you are the one who
             chooses what to do</p>
+        <div class="content-capsule">
+            wow
+        </div>
     </div>
     <div class="sidebar">
         <header class="language-banner alan-sans-title"><p>Current language: None</p><hr style="border-color: #0D9C92" /></header>
         <div class="board">
-            <h3 class="alan-sans-title" style="color:#000020">Nothing to show yet</h3>
+            <h3 class="alan-sans-title" style="color:#000020">mmm... maybe <a href="create/courses" style="color: #0D9CFF; text-decoration: none;">create a new course?</a> </h3>
         </div>
         <div class="profile-box" style="">
             <a class="alan-sans-title profile-link" href="/my/profile"><div>
@@ -177,5 +211,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    window.onload = function() {
+        loadCoursesCapsules();
+    }
+    var courses;
+    function loadCoursesCapsules() {
+        fetch("/enrolled_courses?username=user").then(response =>{
+                console.log(response)
+                if (!response.ok) {
+                    console.log("ERROR")
+                    throw new Error(`HTTP error: ${response.status}`)
+                }
+                console.log("JSON:")
+                console.log(response.json())
+                return response.json;
+            }
+        )
+        console.log("final")
+        console.log(courses);
+    }
+</script>
 </body>
 </html>
