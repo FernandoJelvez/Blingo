@@ -1,6 +1,7 @@
 package com.blingo.lingdyo.controllers;
 
 import com.blingo.lingdyo.dtos.CourseDto;
+import com.blingo.lingdyo.dtos.CourseWithEnrollingStateDto;
 import com.blingo.lingdyo.services.CourseService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,5 +18,10 @@ public class CoursesController {
     public CourseDto[] course(){
         CourseService cs = new CourseService();
         return cs.getAvailableCourses();
+    }
+    @GetMapping("/available_courses_with_state")
+    public CourseWithEnrollingStateDto[] courseWithEnrollingState(@RequestParam(defaultValue="") String username){
+        CourseService cs = new CourseService();
+        return cs.getAvailableCoursesWithState(username);
     }
 }

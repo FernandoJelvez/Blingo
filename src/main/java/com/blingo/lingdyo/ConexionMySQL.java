@@ -1,5 +1,6 @@
 package com.blingo.lingdyo;
 import com.blingo.lingdyo.dtos.CourseDto;
+import com.blingo.lingdyo.dtos.CourseWithEnrollingStateDto;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.*;
@@ -273,6 +274,27 @@ public class ConexionMySQL {
                 String level = rs.getString("level");
                 String language = rs.getString("language");
                 courses.add(new CourseDto(creator,name,likes,level,language));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in database retrieving data: "+e.getMessage());
+        }
+        return courses;
+    }
+    public ArrayList<CourseWithEnrollingStateDto> getCoursesWithEnrollingState(String username) {
+        String get = "SELECT c.user_id as creator, c.name,c.likes,c.level,lang.name AS language, uc.id, "+
+                "CASE WHEN uc.id IS NULL THEN FALSE ELSE TRUE END AS is_enrolled FROM courses c "+
+                "LEFT JOIN users_courses uc ON c.id = uc.course_id INNER JOIN languages lang;";
+        ArrayList<CourseWithEnrollingStateDto> courses = new ArrayList<>();
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(get)){
+            while (rs.next()){
+                String creator = rs.getString("creator");
+                String name = rs.getString("name");
+                int likes = rs.getInt("likes");
+                String level = rs.getString("level");
+                String language = rs.getString("language");
+                boolean is_enrolled = rs.getBoolean("is_enrolled");
+                courses.add(new CourseWithEnrollingStateDto(creator,name,likes,level,language,is_enrolled));
             }
         } catch (SQLException e) {
             System.out.println("Error in database retrieving data: "+e.getMessage());
