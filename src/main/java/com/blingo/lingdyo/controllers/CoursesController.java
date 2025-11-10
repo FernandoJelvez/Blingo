@@ -13,4 +13,9 @@ public class CoursesController {
         CourseService cs = new CourseService();
         return cs.getUserCourses(username);
     }
+    @GetMapping("/available_courses")
+    public CourseDto[] course(){
+        CourseService cs = new CourseService();
+        return cs.getAvailableCourses();
+    }
 }

@@ -258,4 +258,25 @@ public class ConexionMySQL {
         }
         return enrolledCourses;
     }
+
+    public ArrayList<CourseDto> getCourses() {
+        String get = "SELECT c.user_id as creator, c.name,c.likes,c.level,lang.name AS language, uc.id, "+
+                "CASE WHEN uc.id IS NULL THEN 'false' ELSE 'true' END AS is_enrolled FROM courses c "+
+                "LEFT JOIN users_courses uc ON c.id = uc.course_id INNER JOIN languages lang;";
+        ArrayList<CourseDto> courses = new ArrayList<>();
+        try (Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(get)){
+            while (rs.next()){
+                String creator = rs.getString("creator");
+                String name = rs.getString("name");
+                int likes = rs.getInt("likes");
+                String level = rs.getString("level");
+                String language = rs.getString("language");
+                courses.add(new CourseDto(creator,name,likes,level,language));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in database retrieving data: "+e.getMessage());
+        }
+        return courses;
+    }
 }

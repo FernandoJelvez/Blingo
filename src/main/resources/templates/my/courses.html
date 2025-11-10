@@ -195,7 +195,8 @@
         <p class="inconsolata-body">Lingdyo is a cooperative Language Learning Platform where you can learn a language at the same time
             you work with other to teach a language you already know, there's no pressure to do both, you are the one who
             chooses what to do</p>
-        <div id="enrolled-courses-list">
+            <button id="courses-view-switch" onclick="switchCoursesView()" style="color: #f5f5f5; background-color: #11467F">See Available</button>
+        <div id="courses-list">
         </div>
     </div>
     <div class="sidebar">
@@ -219,7 +220,9 @@
 
     async function loadCoursesCapsules() {
         var courses;
-        const url = "/enrolled_courses?username="+document.getElementById("username");
+        var usernameParagraph = document.getElementById("username")
+        const url = "/enrolled_courses?username=" + usernameParagraph.textContent;
+        console.log(url);
         try {
             const response = await fetch(url);
             if(!response.ok){
@@ -237,8 +240,26 @@
             console.log(error.message);
         }
     }
+    async function loadAllAvailableCoursesCapsules(){
+        var courses;
+        const url = "/available_courses";
+        try {
+            const response = await fetch(url);
+            if(!response.ok){
+                throw new Error(`Response status: ${response.status}`);
+            }
+            const result = await response.json();
+
+            for (var i = 0; i<result.length; i++){
+                var r = result[i];
+                addEnrolledCourseCapsule(r.creator,r.name,r.likes,r.level,r.language);
+            }
+        } catch(error) {
+            console.log(error.message);
+        }
+    }
     function addEnrolledCourseCapsule(creator,name,likes,level,language){
-        var enrolledCoursesList = document.getElementById('enrolled-courses-list');
+        var enrolledCoursesList = document.getElementById('courses-list');
         var courseCapsule = document.createElement("div");
         var courseCapsuleClass = document.createAttribute("class");
         var header = document.createElement("header");
@@ -280,6 +301,22 @@
 
 
         console.log("added");
+    }
+    let courseView = 0;
+    function switchCoursesView(){
+        const coursesListElement = document.getElementById("courses-list");
+        const switchButton = document.getElementById("courses-view-switch"); 
+        coursesListElement.innerHTML="";
+
+        if (courseView==0){
+            loadAllAvailableCoursesCapsules();
+            switchButton.textContent="Show enrolled"
+            courseView=1;
+        } else if (courseView==1){
+            loadCoursesCapsules();
+            switchButton.textContent="Show available"
+            courseView=0;
+        }
     }
 
 </script>

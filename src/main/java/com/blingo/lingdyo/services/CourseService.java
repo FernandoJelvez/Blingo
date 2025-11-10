@@ -18,4 +18,15 @@ public class CourseService implements ICourseService{
         }
         return out;
     }
+
+    @Override
+    public CourseDto[] getAvailableCourses() {
+        ConexionMySQL connMySql = new ConexionMySQL();
+        ArrayList<CourseDto> courses = connMySql.getCourses();
+        CourseDto[] out = new CourseDto[courses.size()];
+        for (int i=0;i<courses.size();i++) {
+            out[i] = courses.get(i);
+        }
+        return out;
+    }
 }

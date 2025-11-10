@@ -4,4 +4,6 @@ import com.blingo.lingdyo.dtos.CourseDto;
 
 public interface ICourseService {
     CourseDto[] getUserCourses(String userId);
+
+    CourseDto[] getAvailableCourses();
 }
