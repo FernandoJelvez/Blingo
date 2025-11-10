@@ -1,7 +1,6 @@
 package com.blingo.lingdyo.configuration;
 
 import com.blingo.lingdyo.User;
-import com.blingo.lingdyo.configuration.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

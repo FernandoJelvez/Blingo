@@ -32,8 +32,8 @@ public class User {
     public String getLastname() { return lastname; }
     public void setLastname(String lastname) { this.lastname = lastname; }
 
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
+    public Integer getAge() { return age; }
+    public void setAge(Integer age) { this.age = age; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

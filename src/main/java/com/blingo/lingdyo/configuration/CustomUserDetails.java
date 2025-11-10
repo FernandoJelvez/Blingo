@@ -14,6 +14,8 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Guardar, por si necesitamos agregar roles como Admin.
         return Collections.emptyList();}
+    public User getUser() { return user; }
+    public void setDescription(String description) { this.user.setDescription(description); }
     @Override
     public String getPassword() { return user.getPswd(); }
     @Override
