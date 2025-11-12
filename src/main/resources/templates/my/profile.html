@@ -192,11 +192,11 @@
             <div class="profile-container alan-sans-title">
                 <h1 th:text="'User: ' + ${user.id}">User: id</h1>
                 <p><strong>Name:</strong> [[${user.name}]] [[${user.lastname}]]</p>
-                <p><strong>Email:</strong> <span th:text="${user?.email}">Not added</span></p>
-                <p><strong>Age:</strong> <span th:text="${user?.age}">Not added</span></p>
-                <p><strong>Native Tongue:</strong> <span th:text="${user?.native_tonge}">Not added</span></p>
+                <p><strong>Email:</strong> <span th:text="${user.email ?: 'Not added'}"></span></p>
+                <p><strong>Age:</strong> <span th:text="${user.age ?: 'Not added'}"></span></p>
+                <p><strong>Native Tongue:</strong> <span th:text="${user.native_tonge ?: 'Not added'}"></span></p>
 
-                <a class="edit-button alan-sans-title" th:href="@{/my/profile/editProfile}">Edit Profile</a>
+                <a class="edit-button alan-sans-title" th:href="@{/my/profile/edit}">Edit Profile</a>
             </div>
         </div>
     </div>
