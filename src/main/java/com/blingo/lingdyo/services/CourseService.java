@@ -1,6 +1,7 @@
 package com.blingo.lingdyo.services;
 
 import com.blingo.lingdyo.ConexionMySQL;
+import com.blingo.lingdyo.Course;
 import com.blingo.lingdyo.dtos.CourseDto;
 import com.blingo.lingdyo.dtos.CourseWithEnrollingStateDto;
 
@@ -40,4 +41,11 @@ public class CourseService implements ICourseService{
         }
         return out;
     }
+
+    @Override
+    public void addCourse(Course course, String creator_username) {
+        ConexionMySQL conexionMySQL = new ConexionMySQL();
+        conexionMySQL.addCourse(creator_username,course.getName(),course.getLanguage_id(),course.getLevel());
+    }
+
 }

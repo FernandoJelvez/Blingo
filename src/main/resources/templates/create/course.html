@@ -192,12 +192,24 @@
 <div class="content">
     <div class="main-content">
         <h1 class="alan-sans-title" style="color: #11467F;">My courses</h1>
-        <p class="inconsolata-body">Lingdyo is a cooperative Language Learning Platform where you can learn a language at the same time
-            you work with other to teach a language you already know, there's no pressure to do both, you are the one who
-            chooses what to do</p>
-            <button id="courses-view-switch" onclick="switchCoursesView()" style="color: #f5f5f5; background-color: #11467F">Show Available</button>
-        <div id="courses-list">
-        </div>
+        <p class="inconsolata-body">Welcome to the course creation page, please fill the form bellow and click the
+            submit button (if you want to, you can also go back if you prefer)</p>
+        <form action="/create/course" method="POST" th:object="${course}">
+            <label class="alan-sans-title">Course name</label>
+            <input type="text" name="courseName" id="courseName" th:field="*{name}">
+            <label class="alan-sans-title">Course name</label>
+            <select name="courseLanguage" id="courseLanguage" th:field="*{language_id}">
+
+            </select>
+            <label class="alan-sans-title">Level (Please use official proficiency levels)</label>
+            <input type="text" name="courseLevel" id="courseLevel" th:field="*{level}">
+
+            <input class = "submit-button alan-sans-title" type="submit" name="submit" value="Create Course">
+
+            <!-- Este es el token para que no tener problemas con CSRF -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        </form>
+    </div>
     </div>
     <div class="sidebar">
         <header class="language-banner alan-sans-title"><p>Current language: None</p><hr style="border-color: #0D9C92" /></header>
@@ -211,108 +223,33 @@
             </div></a>
         </div>
     </div>
-</div>
-
-<script>
-    window.onload = async function() {
-        await loadCoursesCapsules();
-        hideNotEnrolledCourses();
-    }
-
-    async function loadCoursesCapsules() {
-        var courses;
-        var usernameParagraph = document.getElementById("username")
-        const url = "/available_courses_with_state?username=" + usernameParagraph.textContent;
-        try {
-            const response = await fetch(url);
-            if(!response.ok){
-                throw new Error(`Response status: ${response.status}`);
+    <script>
+        window.onload = async function() {
+            await loadLanguages();
+        }
+        async function loadLanguages(){
+            const url = "/languages";
+            try {
+                const response = await fetch(url);
+                if(!response.ok){
+                    throw new Error(`Response status: ${response.status}`);
+                }
+                const result = await response.json();
+                for (var i = 0; i<result.length; i++){
+                    var r = result[i];
+                    addLanguageOption(r.id,r.name);
+                }
+            } catch(error) {
+                console.log(error.message);
             }
-            const result = await response.json();
-            for (var i = 0; i<result.length; i++){
-                var r = result[i];
-                addCourseCapsule(r.creator,r.name,r.likes,r.level,r.language,r.is_enrolled);
-            }
-        } catch(error) {
-            console.log(error.message);
         }
-    }
-    function addCourseCapsule(creator,name,likes,level,language,is_enrolled){
-        var enrolledCoursesList = document.getElementById('courses-list');
-        var courseCapsule = document.createElement("div");
-        var courseCapsuleClass = document.createAttribute("class");
-        var header = document.createElement("header");
-        var headerClass = document.createAttribute("class");
-        var courseTitle = document.createElement("h1");
-        var courseTitleClass = document.createAttribute("class");
-        var likesText = document.createElement("h4");
-        var likesTextClass = document.createAttribute("class");
-        var creatorFooter = document.createElement("footer");
-        var creatorFooterClass = document.createAttribute("class");
-        var creatorFooterStyle = document.createAttribute("style");
-
-        courseCapsuleClass.value = "content-capsule";
-        courseCapsuleIsEnrolled = is_enrolled;
-        courseCapsule.setAttributeNode(courseCapsuleClass);
-        courseCapsule.setAttribute("data-enrolled",is_enrolled);
-
-        headerClass.value = "inconsolata-body";
-        header.setAttributeNode(headerClass);
-        header.textContent =  language + " - " + level;
-
-        courseTitleClass.value = "alan-sans-title";
-        courseTitle.setAttributeNode(courseTitleClass);
-        courseTitle.textContent = name;
-
-        likesTextClass.value = "inconsolata-body";
-        likesText.setAttributeNode(likesTextClass);
-        likesText.textContent = likes + " Likes"
-
-        creatorFooterClass.value = "inconsolata-body";
-        creatorFooterStyle.value = "float: right; margin-top: 10px"
-        creatorFooter.setAttributeNode(creatorFooterClass);
-        creatorFooter.setAttributeNode(creatorFooterStyle);
-        creatorFooter.textContent = "Created by: " + creator;
-
-        courseCapsule.append(header);
-        courseCapsule.append(courseTitle);
-        courseCapsule.append(likesText);
-        courseCapsule.append(creatorFooter);
-        enrolledCoursesList.append(courseCapsule);
-
-
-        console.log("added");
-    }
-    let courseView = 0;
-    function switchCoursesView(){
-        const coursesListElement = document.getElementById("courses-list");
-        const switchButton = document.getElementById("courses-view-switch"); 
-
-        if (courseView==0){
-            switchButton.textContent="Show enrolled"
-            showNotEnrolledCourses();
-            courseView=1;
-        } else if (courseView==1){
-            hideNotEnrolledCourses();
-            switchButton.textContent="Show available"
-            courseView=0;
+        function addLanguageOption(language_id,name){
+            let languageSelection = document.getElementById("courseLanguage");
+            let option = document.createElement("option");
+            option.setAttribute("value",language_id);
+            option.textContent=name;
+            languageSelection.appendChild(option);
         }
-    }
-    function hideNotEnrolledCourses(){
-        const notEnrolledCoursesCapsules = document.querySelectorAll('div[data-enrolled="false"]');
-        console.log(notEnrolledCoursesCapsules.length);
-        for (var i = 0; i < notEnrolledCoursesCapsules.length; i++) {
-            notEnrolledCoursesCapsules[i].setAttribute("style","display: none");
-        }
-    }
-    function showNotEnrolledCourses(){
-        const notEnrolledCoursesCapsules = document.querySelectorAll('div[data-enrolled="false"]');
-        console.log(notEnrolledCoursesCapsules.length);
-        for (var i = 0; i < notEnrolledCoursesCapsules.length; i++) {
-            notEnrolledCoursesCapsules[i].setAttribute("style","");
-        }
-    }
-
-</script>
+    </script>
 </body>
 </html>

@@ -1,10 +1,12 @@
 package com.blingo.lingdyo;
 import com.blingo.lingdyo.dtos.CourseDto;
 import com.blingo.lingdyo.dtos.CourseWithEnrollingStateDto;
+import com.blingo.lingdyo.dtos.LanguageDto;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ConexionMySQL {
     private final Connection conn;
@@ -62,7 +64,7 @@ public class ConexionMySQL {
         """; error = crearTabla(languages,"languages",error);
 
         String courses = """
-            CREATE TABLE IF NOT EXISTS coursesIn (
+            CREATE TABLE IF NOT EXISTS courses (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id VARCHAR(15) NOT NULL,
                 language_id INT NOT NULL,
@@ -72,7 +74,7 @@ public class ConexionMySQL {
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 FOREIGN KEY (language_id) REFERENCES languages(id)
             )
-        """; error = crearTabla(courses,"coursesIn", error);
+        """; error = crearTabla(courses,"courses", error);
 
         String contributions = """
             CREATE TABLE IF NOT EXISTS contributions (
@@ -82,7 +84,7 @@ public class ConexionMySQL {
                 type VARCHAR(15) NOT NULL,
                 date DATE DEFAULT (CURRENT_DATE()),
                 FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (course_id) REFERENCES coursesIn(id)
+                FOREIGN KEY (course_id) REFERENCES courses(id)
             )
         """; error = crearTabla(contributions,"contributions", error);
 
@@ -93,7 +95,7 @@ public class ConexionMySQL {
                 course_id INT NOT NULL,
                 likes INT DEFAULT 0,
                 FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (course_id) REFERENCES coursesIn(id)
+                FOREIGN KEY (course_id) REFERENCES courses(id)
             )
         """; error = crearTabla(exercises,"exercises", error);
 
@@ -125,7 +127,7 @@ public class ConexionMySQL {
                 user_id VARCHAR(15) NOT NULL,
                 course_id INT NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (course_id) REFERENCES coursesIn(id)
+                FOREIGN KEY (course_id) REFERENCES courses(id)
             )
         """; error = crearTabla(users_courses, "users_courses", error);
 
@@ -180,12 +182,13 @@ public class ConexionMySQL {
             System.err.println("Error agregando usuario:\n" + e.getMessage());}
     }
 
-    public void addCourse(int user_id, String name, String description){
-        String insert = "INSERT INTO coursesIn (user_id, name, description) VALUES (?,?,?)";
+    public void addCourse(String user_id, String name, int language_id,String level){
+        String insert = "INSERT INTO courses (user_id, name, level,language_id) VALUES (?,?,?,?)";
         try (PreparedStatement values = conn.prepareStatement(insert)) {
-            values.setInt(1,user_id);
+            values.setString(1,user_id);
             values.setString(2,name);
-            values.setString(3,description);
+            values.setString(3,level);
+            values.setInt(4,language_id);
             values.execute();
             System.out.println("Curso agregado correctamente.");}
         catch (SQLException e) {
@@ -240,12 +243,11 @@ public class ConexionMySQL {
     }
     public ArrayList<CourseDto> getEnrolledCourses(String user_id){
         String get = "SELECT c.user_id as creator, c.name,c.likes,c.level,lang.name as language FROM users_courses uc "+
-                "INNER JOIN courses c INNER JOIN languages lang WHERE uc.course_id=c.id AND uc.user_id=";
-        get += "'"+user_id + "';";
-        System.out.println(get);
+                "LEFT JOIN courses c ON uc.course_id = c.id LEFT JOIN languages lang ON lang.id = c.language_id WHERE uc.course_id=c.id AND uc.user_id=?;";
         ArrayList<CourseDto> enrolledCourses= new ArrayList<>();
-        try (Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(get)){
+        try (PreparedStatement ps = conn.prepareStatement(get)){
+            ps.setString(1,user_id);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 String creator = rs.getString("creator");
                 String name = rs.getString("name");
@@ -263,7 +265,7 @@ public class ConexionMySQL {
     public ArrayList<CourseDto> getCourses() {
         String get = "SELECT c.user_id as creator, c.name,c.likes,c.level,lang.name AS language, uc.id, "+
                 "CASE WHEN uc.id IS NULL THEN 'false' ELSE 'true' END AS is_enrolled FROM courses c "+
-                "LEFT JOIN users_courses uc ON c.id = uc.course_id INNER JOIN languages lang;";
+                "LEFT JOIN users_courses uc ON c.id = uc.course_id LEFT JOIN languages lang  ON lang.id = c.language_id;";
         ArrayList<CourseDto> courses = new ArrayList<>();
         try (Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(get)){
@@ -273,6 +275,7 @@ public class ConexionMySQL {
                 int likes = rs.getInt("likes");
                 String level = rs.getString("level");
                 String language = rs.getString("language");
+                System.out.println(creator+", "+name+", "+String.valueOf(likes)+", "+level+", "+language);
                 courses.add(new CourseDto(creator,name,likes,level,language));
             }
         } catch (SQLException e) {
@@ -283,7 +286,7 @@ public class ConexionMySQL {
     public ArrayList<CourseWithEnrollingStateDto> getCoursesWithEnrollingState(String username) {
         String get = "SELECT c.user_id as creator, c.name,c.likes,c.level,lang.name AS language, uc.id, "+
                 "CASE WHEN uc.id IS NULL THEN FALSE ELSE TRUE END AS is_enrolled FROM courses c "+
-                "LEFT JOIN users_courses uc ON c.id = uc.course_id INNER JOIN languages lang;";
+                "LEFT JOIN users_courses uc ON c.id = uc.course_id LEFT JOIN languages lang ON lang.id = c.language_id;";
         ArrayList<CourseWithEnrollingStateDto> courses = new ArrayList<>();
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(get)){
@@ -300,5 +303,20 @@ public class ConexionMySQL {
             System.out.println("Error in database retrieving data: "+e.getMessage());
         }
         return courses;
+    }
+    public List<LanguageDto> getLanguages() {
+        String sql = "SELECT id, name FROM languages;";
+        ArrayList<LanguageDto> languages;
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            languages = new ArrayList<>();
+            while (rs.next()) {
+                languages.add(new LanguageDto(rs.getInt("id"), rs.getString("name")));
+            }
+            return languages;
+        } catch (SQLException e) {
+            System.out.println("Error in database retrieving data: " + e.getMessage());
+        }
+        return null;
     }
 }
