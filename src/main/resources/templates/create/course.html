@@ -197,9 +197,8 @@
         <form action="/create/course" method="POST" th:object="${course}">
             <label class="alan-sans-title">Course name</label>
             <input type="text" name="courseName" id="courseName" th:field="*{name}">
-            <label class="alan-sans-title">Course name</label>
+            <label class="alan-sans-title">Course language</label>
             <select name="courseLanguage" id="courseLanguage" th:field="*{language_id}">
-
             </select>
             <label class="alan-sans-title">Level (Please use official proficiency levels)</label>
             <input type="text" name="courseLevel" id="courseLevel" th:field="*{level}">
