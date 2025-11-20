@@ -15,6 +15,13 @@ public class CustomUserDetails implements UserDetails {
         // Guardar, por si necesitamos agregar roles como Admin.
         return Collections.emptyList();}
     public User getUser() { return user; }
+    public void updateUser(User user) {
+        this.user.setId(user.getId());
+        this.user.setName(user.getName());
+        this.user.setLastname(user.getLastname());
+        this.user.setEmail(user.getEmail());
+        this.user.setAge(user.getAge());
+        this.user.setNative_tonge(user.getNative_tonge());}
     public void setDescription(String description) { this.user.setDescription(description); }
     @Override
     public String getPassword() { return user.getPswd(); }
