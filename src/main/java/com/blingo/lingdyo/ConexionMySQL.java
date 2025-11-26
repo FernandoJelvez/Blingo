@@ -31,7 +31,7 @@ public class ConexionMySQL {
     }
 
     public static void main(String[] args) {
-        new ConexionMySQL().tablasBase();
+        new ConexionMySQL().addUser("Diego0","0","Diego","Torres","");
     }
     public boolean crearTabla(String SQL,String nombre, Boolean error){
         try (Statement state = conn.createStatement()) {
@@ -299,11 +299,11 @@ public class ConexionMySQL {
                     -Tablas creadas existosamente.""");}
     }
 
-    public void addUser(String id, String pswd, String name, String lastname,String email){
-        String insert = "INSERT INTO users (id, pswd, name, lastname,email) VALUES (?,?,?,?,?)";
+    public void addUser(String username, String pswd, String name, String lastname,String email){
+        String insert = "INSERT INTO users (username, pswd, name, lastname,email) VALUES (?,?,?,?,?)";
         String encode = new BCryptPasswordEncoder().encode(pswd);
         try (PreparedStatement values = conn.prepareStatement(insert)) {
-            values.setString(1,id);
+            values.setString(1,username);
             values.setString(2,encode);
             values.setString(3,name);
             values.setString(4,lastname);

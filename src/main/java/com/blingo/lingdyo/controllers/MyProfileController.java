@@ -28,7 +28,7 @@ public class MyProfileController {
     @PostMapping("/my/profile/updateDescription")
     public String updateDescription(@RequestParam("description") String description,
                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
-        User user = userRepository.findById(userDetails.getUsername()).orElse(null);
+        User user = userRepository.findById(userDetails.getId()).orElse(null);
 
         if (user != null && description != null) {
             user.setDescription(description.trim());

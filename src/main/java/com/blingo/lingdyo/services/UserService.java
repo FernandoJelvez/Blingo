@@ -16,11 +16,11 @@ public class UserService implements IUserService {
     public void registerNewUserAccount(User user) {
         System.out.println(user.getId());
         ConexionMySQL conexionMySQL = new ConexionMySQL();
-        String id = user.getId();
+        String username = user.getUsername();
         String password = user.getPswd();
         String name = user.getName();
         String lastname = user.getLastname();
         String email = user.getLastname();
-        conexionMySQL.addUser(id,password,name,lastname,email);
+        conexionMySQL.addUser(username,password,name,lastname,email);
     }
 }

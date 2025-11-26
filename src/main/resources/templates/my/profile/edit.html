@@ -123,10 +123,10 @@
 <div class="form-container alan-sans-title">
   <h1>Edit Profile</h1>
 
-  <form th:action="@{/my/profile/edit}" th:object="${user}" method="post">
+  <form th:action="@{/my/profile/save}" th:object="${user}" method="post">
 
-    <label>Username (ID) — must be unique</label>
-    <input type="text" th:field="*{id}" />
+    <label>Username — must be unique</label>
+    <input type="text" th:field="*{username}" />
 
     <label>Name</label>
     <input type="text" th:field="*{name}" />

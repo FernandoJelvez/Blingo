@@ -14,10 +14,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findById(username)
-                .orElseThrow(() -> {
-                    return new UsernameNotFoundException("Usuario "+username+" no encontrado");
-                });
-        System.out.println("Usuario "+username+" detectado, Hash de contraseña almacenado.");
-        return new CustomUserDetails(user);}
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("Usuario " + username + " no encontrado")
+                );
+
+        System.out.println("Usuario " + username + " detectado, Hash de contraseña almacenado.");
+
+        return new CustomUserDetails(user);
+    }
 }

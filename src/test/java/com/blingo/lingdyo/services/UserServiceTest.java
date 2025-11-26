@@ -20,7 +20,7 @@ class UserServiceTest {
     @Test //Test para probar que UserService agrega el nuevo usuario a la DB
     void registerNewUserAccount_savesUserCorrectly() {
         User u = new User();
-        u.setId("john");
+        u.setUsername("jhon124");
         u.setPswd("123");
         u.setName("John");
         u.setLastname("Doe");

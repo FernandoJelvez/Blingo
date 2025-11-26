@@ -41,11 +41,11 @@ public class MyProfileControllerTest {
     @Test //Test para actualizar descripcion en MyProfileController
     void updateDescriptionUpdatesUser() {
         User u = new User();
-        u.setId("john");
+        u.setId(1);
         u.setDescription("old desc");
 
         CustomUserDetails cud = new CustomUserDetails(u);
-        when(userRepository.findById("john"))
+        when(userRepository.findById(1))
                 .thenReturn(Optional.of(u));
 
         controller.updateDescription("new desc", cud);

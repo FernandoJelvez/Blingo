@@ -23,59 +23,45 @@ public class EditProfileController {
         return "my/profile/edit";
     }
 
-    @PostMapping("/my/profile/edit")
-    @Transactional
+    @PostMapping("/my/profile/save")
     public String saveProfile(
             @ModelAttribute User updatedUser,
             @AuthenticationPrincipal CustomUserDetails userDetails,
             Model model) {
-        User dbUser = userRepository.findById(userDetails.getUsername()).orElse(null);
 
+        // Buscar por ID (el id real que no cambia)
+        User dbUser = userRepository.findById(userDetails.getUser().getId()).orElse(null);
         if (dbUser == null) {
             model.addAttribute("error", "User not found.");
             return "my/profile/edit";
         }
-        //valida el email
+
+        // Validación de email
         if (updatedUser.getEmail() != null && !updatedUser.getEmail().contains("@")) {
             model.addAttribute("error", "Invalid email.");
             return "my/profile/edit";
         }
-        //confirma username único
-        if (!dbUser.getId().equals(updatedUser.getId())
-                && userRepository.existsById(updatedUser.getId())) {
+
+        if (!dbUser.getUsername().equals(updatedUser.getUsername())
+                && userRepository.existsByUsername(updatedUser.getUsername())) {
             model.addAttribute("error", "Username already exists.");
             return "my/profile/edit";
         }
 
-        boolean changedId = !dbUser.getId().equals(updatedUser.getId());
+        // === Actualización normal (sin recrear el usuario) ===
 
-        if (changedId) {//Crear un nuevo usuario con el ID nuevo
-            User newUser = new User();
-            newUser.setId(updatedUser.getId());
-            newUser.setPswd(dbUser.getPswd());    //nota: esto solo conserva la contraseña, no hay cambios reales
-            newUser.setName(updatedUser.getName());
-            newUser.setLastname(updatedUser.getLastname());
-            newUser.setEmail(updatedUser.getEmail());
-            newUser.setAge(updatedUser.getAge());
-            newUser.setNative_tonge(updatedUser.getNative_tonge());
-            newUser.setDescription(dbUser.getDescription());
+        dbUser.setUsername(updatedUser.getUsername());
+        dbUser.setName(updatedUser.getName());
+        dbUser.setLastname(updatedUser.getLastname());
+        dbUser.setEmail(updatedUser.getEmail());
+        dbUser.setAge(updatedUser.getAge());
+        dbUser.setNative_tonge(updatedUser.getNative_tonge());
 
-            userRepository.save(newUser);
-            // eliminar el usuario viejo
-            userRepository.delete(dbUser);
-            // actualizar los datos en la sesión
-            userDetails.updateUser(newUser);
-        } else {
-            // Edición normal
-            dbUser.setName(updatedUser.getName());
-            dbUser.setLastname(updatedUser.getLastname());
-            dbUser.setEmail(updatedUser.getEmail());
-            dbUser.setAge(updatedUser.getAge());
-            dbUser.setNative_tonge(updatedUser.getNative_tonge());
+        userRepository.save(dbUser);
 
-            userRepository.save(dbUser);
-            userDetails.updateUser(dbUser);
-        }
+        // Actualizar los datos de la sesión
+        userDetails.updateUser(dbUser);
+
         return "redirect:/my/profile";
     }
 }

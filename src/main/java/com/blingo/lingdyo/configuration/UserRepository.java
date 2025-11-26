@@ -4,6 +4,8 @@ import java.util.Optional;
 import com.blingo.lingdyo.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, String> {
-    Optional<User> findById(String id);
+public interface UserRepository extends JpaRepository<User, Integer> {
+    Optional<User> findById(Integer id);
+    Optional<User> findByUsername(String username);
+    boolean existsByUsername(String username);
 }
