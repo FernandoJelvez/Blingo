@@ -76,7 +76,6 @@
 			<!-- Este es el token para que no tener problemas con CSRF -->
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-            <button type="submit">Sign Up</button>
 			<p class="inconsolata-body">Already have an account? <a class="alan-sans-title" href="/login">Log in</a></p>
 			<!-- Esto solo se mostrará si hay algún error por parte del usuario en el login. -->
 			<div th:if="${param.error}">

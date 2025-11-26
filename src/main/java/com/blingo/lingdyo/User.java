@@ -1,14 +1,13 @@
 package com.blingo.lingdyo;
 
 import com.blingo.lingdyo.annotations.ValidEmail;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String username;
     private String pswd;
@@ -19,6 +18,8 @@ public class User {
     @ValidEmail
     private String email;
     private String native_tonge;
+
+    public User() {}
 
     // Getters y setters
     public Integer getId() { return id; }
