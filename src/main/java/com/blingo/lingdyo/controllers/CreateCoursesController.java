@@ -1,8 +1,7 @@
 package com.blingo.lingdyo.controllers;
 
 import com.blingo.lingdyo.Course;
-import com.blingo.lingdyo.configuration.CustomUserDetails;
-import com.blingo.lingdyo.dtos.NewCourseDataDto;
+import com.blingo.lingdyo.services.CustomUserDetails;
 import com.blingo.lingdyo.services.CourseService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package com.blingo.lingdyo.configuration;
+package com.blingo.lingdyo.services;
 
 import com.blingo.lingdyo.User;
 import org.springframework.security.core.GrantedAuthority;

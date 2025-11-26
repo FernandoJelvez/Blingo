@@ -1,4 +1,4 @@
-package com.blingo.lingdyo.configuration;
+package com.blingo.lingdyo.repositorys;
 
 import java.util.Optional;
 import com.blingo.lingdyo.User;

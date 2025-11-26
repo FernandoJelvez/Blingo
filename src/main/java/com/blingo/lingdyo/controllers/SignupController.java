@@ -1,11 +1,9 @@
 package com.blingo.lingdyo.controllers;
 
 import com.blingo.lingdyo.User;
-import com.blingo.lingdyo.configuration.UserRepository;
 import com.blingo.lingdyo.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;

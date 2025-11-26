@@ -31,7 +31,8 @@ public class ConexionMySQL {
     }
 
     public static void main(String[] args) {
-        new ConexionMySQL().addUser("Diego0","0","Diego","Torres","");
+        new ConexionMySQL().tablasBaseREF();
+        /// new ConexionMySQL().addUser("Diego0","0","Diego","Torres","");
     }
     public boolean crearTabla(String SQL,String nombre, Boolean error){
         try (Statement state = conn.createStatement()) {
@@ -183,7 +184,7 @@ public class ConexionMySQL {
                 lastname VARCHAR(15) NOT NULL,
                 age INT,
                 description VARCHAR(100),
-                email VARCHAR(50),
+                email VARCHAR(50) NOT NULL,
                 native_tonge VARCHAR(50)
             )
         """; error = crearTabla(users,"users", error);
@@ -314,10 +315,10 @@ public class ConexionMySQL {
             System.err.println("Error agregando usuario:\n" + e.getMessage());}
     }
 
-    public void addCourse(String user_id, String name, int language_id,String level){
+    public void addCourse(Integer user_id, String name, int language_id,String level){
         String insert = "INSERT INTO courses (user_id, name, level,language_id) VALUES (?,?,?,?)";
         try (PreparedStatement values = conn.prepareStatement(insert)) {
-            values.setString(1,user_id);
+            values.setInt(1,user_id);
             values.setString(2,name);
             values.setString(3,level);
             values.setInt(4,language_id);

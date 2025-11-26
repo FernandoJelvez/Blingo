@@ -1,12 +1,11 @@
 package com.blingo.lingdyo.controllers;
 
 import com.blingo.lingdyo.User;
-import com.blingo.lingdyo.configuration.CustomUserDetails;
-import com.blingo.lingdyo.configuration.UserRepository;
+import com.blingo.lingdyo.services.CustomUserDetails;
+import com.blingo.lingdyo.repositorys.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;

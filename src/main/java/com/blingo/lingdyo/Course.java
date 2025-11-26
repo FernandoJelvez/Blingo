@@ -1,64 +1,36 @@
 package com.blingo.lingdyo;
 
-import java.util.ArrayList;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "courses")
 public class Course {
+    @Id
     private int id;
+    private Integer userId;
+    private int language_id;
     private String name;
-    private String description;
-    private int language_id =1;
-    private String level="";
-    private int likes=0;
-    private ArrayList<Sentence> sentences;
+    private int likes;
+    private String level;
 
-    public void addSentence(){}
+    // Getters y setters
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
 
-    public int getId() {
-        return id;
-    }
+    public Integer getUserId() {return userId;}
+    public void setUserId(Integer userId) {this.userId = userId;}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getLanguage_id() {return language_id;}
+    public void setLanguage_id(int language_id) {this.language_id = language_id;}
 
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name;}
+    public void setName(String name) {this.name = name;}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public int getLikes() {return likes;}
+    public void setLikes(int likes) {this.likes = likes;}
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-    public int getLanguage_id() {
-        return language_id;
-    }
-
-    public void setLanguage_id(int language_id) {
-        this.language_id = language_id;
-    }
-
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
+    public String getLevel() {return level;}
+    public void setLevel(String level) {this.level = level;}
 }

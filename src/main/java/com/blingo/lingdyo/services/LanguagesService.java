@@ -2,18 +2,22 @@ package com.blingo.lingdyo.services;
 
 import com.blingo.lingdyo.ConexionMySQL;
 import com.blingo.lingdyo.dtos.LanguageDto;
+import com.blingo.lingdyo.repositorys.LanguageRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class LanguagesService implements  ILanguagesService {
+@Service
+public class LanguagesService implements ILanguagesService {
+    @Autowired
+    private LanguageRepository languageRepository;
+
     @Override
-    public LanguageDto[] getLanguages(){
-        ConexionMySQL conn = new ConexionMySQL();
-        List<LanguageDto> languages = conn.getLanguages();
-        LanguageDto[] out = new LanguageDto[languages.size()];
-        for (int i = 0; i < languages.size(); i++) {
-            out[i] = languages.get(i);
-        }
-        return out;
+    public LanguageDto[] getLanguages() {
+        return languageRepository.findAll()
+                .stream()
+                .map(l -> new LanguageDto(l.getId(), l.getName()))
+                .toArray(LanguageDto[]::new);
     }
 }
