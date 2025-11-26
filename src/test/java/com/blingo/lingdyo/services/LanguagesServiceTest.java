@@ -1,8 +1,7 @@
 package com.blingo.lingdyo.services;
 
 import com.blingo.lingdyo.Language;
-import com.blingo.lingdyo.dtos.LanguageDto;
-import com.blingo.lingdyo.repositorys.LanguageRepository;
+import com.blingo.lingdyo.repositories.LanguageRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

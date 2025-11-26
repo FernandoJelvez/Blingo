@@ -1,6 +1,6 @@
 package com.blingo.lingdyo.controllers;
 import com.blingo.lingdyo.*;
-import com.blingo.lingdyo.repositorys.UserRepository;
+import com.blingo.lingdyo.repositories.UserRepository;
 import com.blingo.lingdyo.services.CustomUserDetails;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;

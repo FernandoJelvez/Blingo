@@ -1,7 +1,7 @@
 package com.blingo.lingdyo.services;
 
 import com.blingo.lingdyo.User;
-import com.blingo.lingdyo.repositorys.UserRepository;
+import com.blingo.lingdyo.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

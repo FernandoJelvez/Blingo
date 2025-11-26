@@ -5,10 +5,10 @@ import com.blingo.lingdyo.Language;
 import com.blingo.lingdyo.UsersCourses;
 import com.blingo.lingdyo.dtos.CourseDto;
 import com.blingo.lingdyo.dtos.CourseWithEnrollingStateDto;
-import com.blingo.lingdyo.repositorys.CourseRepository;
-import com.blingo.lingdyo.repositorys.LanguageRepository;
-import com.blingo.lingdyo.repositorys.UserRepository;
-import com.blingo.lingdyo.repositorys.UsersCoursesRepository;
+import com.blingo.lingdyo.repositories.CourseRepository;
+import com.blingo.lingdyo.repositories.LanguageRepository;
+import com.blingo.lingdyo.repositories.UserRepository;
+import com.blingo.lingdyo.repositories.UsersCoursesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

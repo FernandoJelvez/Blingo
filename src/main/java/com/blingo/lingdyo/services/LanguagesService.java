@@ -1,12 +1,9 @@
 package com.blingo.lingdyo.services;
 
-import com.blingo.lingdyo.ConexionMySQL;
 import com.blingo.lingdyo.dtos.LanguageDto;
-import com.blingo.lingdyo.repositorys.LanguageRepository;
+import com.blingo.lingdyo.repositories.LanguageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class LanguagesService implements ILanguagesService {

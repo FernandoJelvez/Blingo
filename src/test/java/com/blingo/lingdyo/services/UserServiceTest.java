@@ -1,7 +1,7 @@
 package com.blingo.lingdyo.services;
 
 import com.blingo.lingdyo.User;
-import com.blingo.lingdyo.repositorys.UserRepository;
+import com.blingo.lingdyo.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

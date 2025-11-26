@@ -4,7 +4,7 @@ import com.blingo.lingdyo.dtos.CourseDto;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import com.blingo.lingdyo.repositorys.*;
+import com.blingo.lingdyo.repositories.*;
 import com.blingo.lingdyo.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
