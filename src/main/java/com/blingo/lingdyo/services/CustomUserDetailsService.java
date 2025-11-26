@@ -1,5 +1,6 @@
 package com.blingo.lingdyo.services;
 
+import com.blingo.lingdyo.CustomUserDetails;
 import com.blingo.lingdyo.User;
 import com.blingo.lingdyo.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetailsService;

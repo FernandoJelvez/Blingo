@@ -1,6 +1,6 @@
 package com.blingo.lingdyo.controllers;
 
-import com.blingo.lingdyo.services.CustomUserDetails;
+import com.blingo.lingdyo.CustomUserDetails;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

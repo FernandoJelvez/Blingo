@@ -1,7 +1,7 @@
 package com.blingo.lingdyo.controllers;
 import com.blingo.lingdyo.*;
 import com.blingo.lingdyo.repositories.UserRepository;
-import com.blingo.lingdyo.services.CustomUserDetails;
+import com.blingo.lingdyo.CustomUserDetails;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

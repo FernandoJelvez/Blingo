@@ -1,7 +1,7 @@
 package com.blingo.lingdyo.controllers;
 
 import com.blingo.lingdyo.User;
-import com.blingo.lingdyo.services.CustomUserDetails;
+import com.blingo.lingdyo.CustomUserDetails;
 import com.blingo.lingdyo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
