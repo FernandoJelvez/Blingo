@@ -20,7 +20,7 @@ class UserServiceTest {
     BCryptPasswordEncoder encoder;
     @InjectMocks
     UserService service;
-    @Test
+    @Test //Test para probar que UserService agrega el nuevo usuario a la DB
     void registerNewUserAccount_savesUserCorrectly() {
         User u = new User();
         u.setUsername("jhon123");

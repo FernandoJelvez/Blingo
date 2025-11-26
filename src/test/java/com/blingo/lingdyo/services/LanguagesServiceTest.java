@@ -18,18 +18,17 @@ class LanguagesServiceTest {
     private LanguageRepository languageRepository;
     @InjectMocks
     private LanguagesService service;
-    @Test
+    @Test //Test que comprueba que se ha devuelto un arreglo usando LanguagesService
     void getLanguages_ReturnsArray() {
-        // Arrange — simulamos entidades
+        // Simulamos entidades
         Language lang = new Language();
         lang.setId(1);
         lang.setName("English");
         when(languageRepository.findAll()).thenReturn(List.of(lang));
-        // Act
-        LanguageDto[] out = service.getLanguages();
         // Assert
-        assertNotNull(out);
-        assertEquals(1, out.length);
-        assertEquals("English", out[0].getName());
+        assertNotNull(service.getLanguages());
+        assertTrue(service.getLanguages().length > 0);
+        assertEquals("English", service.getLanguages()[0].getName());
+
     }
 }

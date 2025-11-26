@@ -21,14 +21,10 @@ class CourseServiceTest {
     UsersCoursesRepository usersCoursesRepository;
     @Test //Course services obtiene un arreglo no nulo de Cursos
     void getUserCourses_ReturnsArray() {
-        // arrange: usuario mock
         User u = new User();
-        u.setId(1);
         when(userRepository.findByUsername("john")).thenReturn(java.util.Optional.of(u));
-        when(usersCoursesRepository.findByUserId(1)).thenReturn(java.util.Collections.emptyList());
-        // act
+
         CourseDto[] result = service.getUserCourses("john");
-        // assert
         assertNotNull(result);
     }
 }

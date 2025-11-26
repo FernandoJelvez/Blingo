@@ -1,22 +1,10 @@
 package com.blingo.lingdyo;
-import com.blingo.lingdyo.dtos.CourseDto;
-import com.blingo.lingdyo.dtos.CourseWithEnrollingStateDto;
-import com.blingo.lingdyo.dtos.LanguageDto;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ConexionMySQL {
-    private final Connection conn;
-
-    public ConexionMySQL() {
-        this.conn = conectarSQL();
-    }
-    //Modifica USER y PASSWORD si lo necesitas
-    //para poder conectarte a la db ↓
-    public Connection conectarSQL() {
+    private static final Connection conn = conectarSQL();
+    public static Connection conectarSQL() {
         Connection connection = null;
         try {
             //ADVERTENCIA: Me falta un comentario completo para agregar la database de blingo
@@ -31,10 +19,9 @@ public class ConexionMySQL {
     }
 
     public static void main(String[] args) {
-        new ConexionMySQL().tablasBaseREF();
-        /// new ConexionMySQL().addUser("Diego0","0","Diego","Torres","");
+        ConexionMySQL.tablasBaseREF();
     }
-    public boolean crearTabla(String SQL,String nombre, Boolean error){
+    public static boolean crearTabla(String SQL,String nombre, Boolean error){
         try (Statement state = conn.createStatement()) {
             state.execute(SQL);}
         catch (SQLException e) {
@@ -42,135 +29,7 @@ public class ConexionMySQL {
             error = true;}
         return error;
     }
-    public void tablasBase(){
-        boolean error = false;
-        /*Las id foraneas de User en tablas no relacionales son para
-        diferenciar su creador.*/
-
-        String users = """
-            CREATE TABLE IF NOT EXISTS users (
-                id VARCHAR(15) PRIMARY KEY,
-                pswd VARCHAR(255) NOT NULL,
-                name VARCHAR(15) NOT NULL,
-                lastname VARCHAR(15) NOT NULL,
-                age INT,
-                description VARCHAR(100),
-                email VARCHAR(50),
-                native_tonge VARCHAR(50)
-            )
-        """; error = crearTabla(users,"users", error);
-
-        String languages = """
-            CREATE TABLE IF NOT EXISTS languages (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(15)
-            )
-        """; error = crearTabla(languages,"languages",error);
-
-        String courses = """
-            CREATE TABLE IF NOT EXISTS courses (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id VARCHAR(15) NOT NULL,
-                language_id INT NOT NULL,
-                name VARCHAR(50) NOT NULL,
-                likes INT DEFAULT 0,
-                level VARCHAR(50),
-                FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (language_id) REFERENCES languages(id)
-            )
-        """; error = crearTabla(courses,"courses", error);
-
-        String contributions = """
-            CREATE TABLE IF NOT EXISTS contributions (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id VARCHAR(15) NOT NULL,
-                course_id INT NOT NULL,
-                type VARCHAR(15) NOT NULL,
-                date DATE DEFAULT (CURRENT_DATE()),
-                FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (course_id) REFERENCES courses(id)
-            )
-        """; error = crearTabla(contributions,"contributions", error);
-
-        String exercises = """
-            CREATE TABLE IF NOT EXISTS exercises (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id VARCHAR(15) NOT NULL,
-                course_id INT NOT NULL,
-                likes INT DEFAULT 0,
-                FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (course_id) REFERENCES courses(id)
-            )
-        """; error = crearTabla(exercises,"exercises", error);
-
-        String sentences = """
-            CREATE TABLE IF NOT EXISTS sentences (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id VARCHAR(15) NOT NULL,
-                language_id INT NOT NULL,
-                content VARCHAR(100) NOT NULL,
-                likes INT DEFAULT 0,
-                FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (language_id) REFERENCES languages(id)
-            )
-        """; error = crearTabla(sentences,"sentences", error);
-
-        String words = """
-            CREATE TABLE IF NOT EXISTS words (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                language_id INT NOT NULL,
-                content VARCHAR(50) NOT NULL,
-                FOREIGN KEY (language_id) REFERENCES languages(id)
-            )
-        """; error = crearTabla(words,"words", error);
-
-//Tablas relacionales (N-M)
-        String users_courses = """
-            CREATE TABLE IF NOT EXISTS users_courses (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id VARCHAR(15) NOT NULL,
-                course_id INT NOT NULL,
-                FOREIGN KEY (user_id) REFERENCES users(id),
-                FOREIGN KEY (course_id) REFERENCES courses(id)
-            )
-        """; error = crearTabla(users_courses, "users_courses", error);
-
-        String exercises_sentences = """
-            CREATE TABLE IF NOT EXISTS exercises_sentences (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                exercise_id INT NOT NULL,
-                sentence_id INT NOT NULL,
-                FOREIGN KEY (exercise_id) REFERENCES exercises(id),
-                FOREIGN KEY (sentence_id) REFERENCES sentences(id)
-            )
-        """; error = crearTabla(exercises_sentences,"exercoses_sentences", error);
-
-        String sentences_words = """
-            CREATE TABLE IF NOT EXISTS sentences_words (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                sentence_id INT NOT NULL,
-                word_id INT NOT NULL,
-                FOREIGN KEY (sentence_id) REFERENCES sentences(id),
-                FOREIGN KEY (word_id) REFERENCES words(id)
-            )
-        """; error = crearTabla(sentences_words,"sentences_words", error);
-
-        String translates_as = """
-            CREATE TABLE IF NOT EXISTS translates_as (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                word1_id INT NOT NULL,
-                word2_id INT NOT NULL,
-                FOREIGN KEY (word1_id) REFERENCES words(id),
-                FOREIGN KEY (word2_id) REFERENCES words(id)
-            )
-        """; error = crearTabla(translates_as,"translates_as", error);
-
-//Notificar por consola en caso de no haber errores.
-        if(!error){
-            System.out.println("""
-                    -Tablas creadas existosamente.""");}
-    }
-    public void tablasBaseREF(){
+    public static void tablasBaseREF(){
         boolean error = false;
         /*Las id foraneas de User en tablas no relacionales son para
         diferenciar su creador.*/
@@ -300,7 +159,7 @@ public class ConexionMySQL {
                     -Tablas creadas existosamente.""");}
     }
 
-    public void addUser(String username, String pswd, String name, String lastname,String email){
+    public static void addUser(String username, String pswd, String name, String lastname,String email){
         String insert = "INSERT INTO users (username, pswd, name, lastname,email) VALUES (?,?,?,?,?)";
         String encode = new BCryptPasswordEncoder().encode(pswd);
         try (PreparedStatement values = conn.prepareStatement(insert)) {
@@ -314,8 +173,7 @@ public class ConexionMySQL {
         catch (SQLException e) {
             System.err.println("Error agregando usuario:\n" + e.getMessage());}
     }
-
-    public void addCourse(Integer user_id, String name, int language_id,String level){
+    public static void addCourse(Integer user_id, String name, int language_id,String level){
         String insert = "INSERT INTO courses (user_id, name, level,language_id) VALUES (?,?,?,?)";
         try (PreparedStatement values = conn.prepareStatement(insert)) {
             values.setInt(1,user_id);
@@ -326,83 +184,5 @@ public class ConexionMySQL {
             System.out.println("Curso agregado correctamente.");}
         catch (SQLException e) {
             System.err.println("Error agregando curso:\n" + e.getMessage());}
-    }
-    public ArrayList<CourseDto> getEnrolledCourses(String user_id){
-        String get = "SELECT c.user_id as creator, c.name,c.likes,c.level,lang.name as language FROM users_courses uc "+
-                "LEFT JOIN courses c ON uc.course_id = c.id LEFT JOIN languages lang ON lang.id = c.language_id WHERE uc.course_id=c.id AND uc.user_id=?;";
-        ArrayList<CourseDto> enrolledCourses= new ArrayList<>();
-        try (PreparedStatement ps = conn.prepareStatement(get)){
-            ps.setString(1,user_id);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                String creator = rs.getString("creator");
-                String name = rs.getString("name");
-                int likes = rs.getInt("likes");
-                String level = rs.getString("level");
-                String language = rs.getString("language");
-                enrolledCourses.add(new CourseDto(creator,name,likes,level,language));
-            }
-        } catch (Exception e) {
-            System.err.println("Error al obtener datos: "+e.getMessage());
-        }
-        return enrolledCourses;
-    }
-
-    public ArrayList<CourseDto> getCourses() {
-        String get = "SELECT c.user_id as creator, c.name,c.likes,c.level,lang.name AS language, uc.id, "+
-                "CASE WHEN uc.id IS NULL THEN 'false' ELSE 'true' END AS is_enrolled FROM courses c "+
-                "LEFT JOIN users_courses uc ON c.id = uc.course_id LEFT JOIN languages lang  ON lang.id = c.language_id;";
-        ArrayList<CourseDto> courses = new ArrayList<>();
-        try (Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(get)){
-            while (rs.next()){
-                String creator = rs.getString("creator");
-                String name = rs.getString("name");
-                int likes = rs.getInt("likes");
-                String level = rs.getString("level");
-                String language = rs.getString("language");
-                System.out.println(creator+", "+name+", "+String.valueOf(likes)+", "+level+", "+language);
-                courses.add(new CourseDto(creator,name,likes,level,language));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error in database retrieving data: "+e.getMessage());
-        }
-        return courses;
-    }
-    public ArrayList<CourseWithEnrollingStateDto> getCoursesWithEnrollingState(String username) {
-        String get = "SELECT c.user_id as creator, c.name,c.likes,c.level,lang.name AS language, uc.id, "+
-                "CASE WHEN uc.id IS NULL THEN FALSE ELSE TRUE END AS is_enrolled FROM courses c "+
-                "LEFT JOIN users_courses uc ON c.id = uc.course_id LEFT JOIN languages lang ON lang.id = c.language_id;";
-        ArrayList<CourseWithEnrollingStateDto> courses = new ArrayList<>();
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(get)){
-            while (rs.next()){
-                String creator = rs.getString("creator");
-                String name = rs.getString("name");
-                int likes = rs.getInt("likes");
-                String level = rs.getString("level");
-                String language = rs.getString("language");
-                boolean is_enrolled = rs.getBoolean("is_enrolled");
-                courses.add(new CourseWithEnrollingStateDto(creator,name,likes,level,language,is_enrolled));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error in database retrieving data: "+e.getMessage());
-        }
-        return courses;
-    }
-    public List<LanguageDto> getLanguages() {
-        String sql = "SELECT id, name FROM languages;";
-        ArrayList<LanguageDto> languages;
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            languages = new ArrayList<>();
-            while (rs.next()) {
-                languages.add(new LanguageDto(rs.getInt("id"), rs.getString("name")));
-            }
-            return languages;
-        } catch (SQLException e) {
-            System.out.println("Error in database retrieving data: " + e.getMessage());
-        }
-        return null;
     }
 }
