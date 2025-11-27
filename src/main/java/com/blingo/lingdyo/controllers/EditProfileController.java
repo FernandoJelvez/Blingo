@@ -3,6 +3,7 @@ package com.blingo.lingdyo.controllers;
 import com.blingo.lingdyo.User;
 import com.blingo.lingdyo.CustomUserDetails;
 import com.blingo.lingdyo.repositories.UserRepository;
+import com.blingo.lingdyo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -48,19 +49,19 @@ public class EditProfileController {
         }
 
         // === Actualización normal (sin recrear el usuario) ===
-
-        dbUser.setUsername(updatedUser.getUsername());
-        dbUser.setName(updatedUser.getName());
-        dbUser.setLastname(updatedUser.getLastname());
-        dbUser.setEmail(updatedUser.getEmail());
-        dbUser.setAge(updatedUser.getAge());
-        dbUser.setNative_tonge(updatedUser.getNative_tonge());
-
-        userRepository.save(dbUser);
-
-        // Actualizar los datos de la sesión
+        updateUser(dbUser,updatedUser);
         userDetails.updateUser(dbUser);
 
         return "redirect:/my/profile";
+    }
+    public void updateUser(User user, User updatedUser){
+        user.setUsername(updatedUser.getUsername());
+        user.setName(updatedUser.getName());
+        user.setLastname(updatedUser.getLastname());
+        user.setEmail(updatedUser.getEmail());
+        user.setAge(updatedUser.getAge());
+        user.setNative_tonge(updatedUser.getNative_tonge());
+
+        userRepository.save(user);
     }
 }
