@@ -3,6 +3,8 @@ package com.blingo.lingdyo.controllers;
 import com.blingo.lingdyo.Course;
 import com.blingo.lingdyo.CustomUserDetails;
 import com.blingo.lingdyo.services.CourseService;
+import com.blingo.lingdyo.services.LanguagesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,11 +15,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class CreateCoursesController {
+    @Autowired
+    private LanguagesService languagesService;
+
     @GetMapping("/create/course")
     public String showCreateCoursesPage(Model model) {
         Course course = new Course();
-        model.addAttribute("course",course);
-        System.out.println("create course");
+        model.addAttribute("course", course);
+        model.addAttribute("languages", languagesService.getLanguages());
+
         return "/create/course";
     }
     @PostMapping("/create/course")
