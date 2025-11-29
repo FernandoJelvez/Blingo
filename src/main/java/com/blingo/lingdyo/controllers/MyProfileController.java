@@ -36,4 +36,16 @@ public class MyProfileController {
             userDetails.setDescription(description);}
         return "redirect:/my/profile";
     }
+
+    @PostMapping("/my/profile/delete")
+    public String deleteAccount(@AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        Integer id = userDetails.getUser().getId();
+
+        // Borrar usuario
+        userRepository.deleteById(id);
+
+        // Redirigir a logout para limpiar sesión
+        return "redirect:/";
+    }
 }

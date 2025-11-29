@@ -13,7 +13,7 @@ public class User {
     private String pswd;
     private String name;
     private String lastname;
-    private Integer age = 0;
+    private Integer age;
     private String description;
     @ValidEmail
     private String email;

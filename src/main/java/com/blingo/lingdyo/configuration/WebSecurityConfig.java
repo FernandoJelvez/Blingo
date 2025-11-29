@@ -29,6 +29,7 @@ public class WebSecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
