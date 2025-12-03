@@ -8,7 +8,6 @@
 .inconsolata-body {
     font-family: "Inconsolata", monospace;
     font-optical-sizing: auto;
-    font-weight: <weight>;
     font-style: normal;
     font-variation-settings:
     "wdth" 100;
@@ -27,7 +26,6 @@ body {
     margin:0 10px 0 10px;
 }
 .top-nav {
-    position: fixed 0 0;
     background-color: whitesmoke;
     background-image: linear-gradient(whitesmoke, slategrey);
     border-radius: 0 0 50px 50px;
@@ -36,7 +34,6 @@ body {
     border-style: none none solid;
     border-color:#123f6e;
     border-width: 4px;
-    height: auto;
 }
 .navbar-element {
     margin: 0;
@@ -109,7 +106,6 @@ body {
 .board {
     width: 90%;
     height: 90%;
-    background-color:whitesmoke;
     border-radius: 25px;
     padding: 10px;
     background-color: #0000;
