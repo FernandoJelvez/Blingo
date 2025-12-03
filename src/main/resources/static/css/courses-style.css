@@ -1,0 +1,33 @@
+/*holo-display*/
+.content-capsule {
+    border-radius: 25px 25px 0 0;
+    padding:10px;
+    margin: 25px;
+    border-style:none none solid;
+    background-image:radial-gradient(#00808080, #0000), repeating-linear-gradient(#00FFFF80,#00808080 1px);
+    background-color: #00FFFF80;
+    border-width: 25px;
+    min-height: 75px;
+    border-image: linear-gradient(whitesmoke, slategrey) 100;
+    box-shadow: inset 0px 3px 10px #088,
+    0px 3px 10px;
+}
+/*glass*/
+/*.content-capsule {
+    border-radius: 25px;
+    padding:10px;
+    margin: 20px;
+    background-color: #0000;
+    min-height: 75px;
+    box-shadow: inset 0px 3px 10px,
+    0px 3px 10px;
+}*/
+/*round plastic*/
+/*.content-capsule {
+    border-radius: 25px;
+    padding:25px 25px;
+    margin: 20px;
+    background-image: linear-gradient(whitesmoke 10%,#b9c0c8,slategrey 90%);
+    min-height: 75px;
+    box-shadow:0px 3px 5px;
+}*/

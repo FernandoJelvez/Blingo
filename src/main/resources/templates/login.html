@@ -6,64 +6,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Alan+Sans&family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
 <head>
 	<title>Lingdyo login</title>
-	<style>
-		form {
-			display: grid;
-			grid-template-rows: auto auto auto auto auto auto;
-			width: 400px
-		}
-		input {
-			margin-bottom: 20px;
-			font-size:20px;
-		}
-		.form-box {
-			border-radius:100px /250px;
-			background-color: whitesmoke;
-			background-image: linear-gradient(whitesmoke, slategrey);
-			width:500px;
-			height:250px;
-			background-color: red;
-			margin-top: 150px;
-			padding: 20px;
-			border-color: #000010;
-			border-width: 2px;
-			border-style: solid;
-			display: flex;
-			justify-content: center;
-		}
-		.form-page {
-			display: flex;
-			justify-content: center;
-		}
-		.submit-button {
-			background-color: #11467f;
-			color: azure;
-		}
-        .alan-sans-title {
-          font-family: "Alan Sans", sans-serif;
-          font-optical-sizing: auto;
-          font-weight: 500;
-          font-style: normal;
-        }
-
-        .inconsolata-body {
-            font-family: "Inconsolata", monospace;
-            font-optical-sizing: auto;
-            font-weight: <weight>;
-            font-style: normal;
-            font-variation-settings:
-            "wdth" 100;
-            font-size: 22px;
-        }
-	</style>
+	<link rel="stylesheet" th:href="@{css/login-style.css}">
+    <link rel="stylesheet" th:href="@{css/auth-form-common-style.css}">
 </head>
 <body class="form-page">
 	<div class="form-box" style="">
 		<form action="/login" method="POST">
 			<label class="alan-sans-title">Username</label>
-			<input style="background-color: #00000000; box-shadow: inset 0px 2px 5px" type="text" name="username" id="username">
+			<input class="input-shadow-and-style" type="text" name="username" id="username">
 			<label class="alan-sans-title">Password</label>
-			<input style="background-color: #00000000; box-shadow: inset 0px 3px 5px" type="password" name="password" id="password">
+			<input class="input-shadow-and-style" type="password" name="password" id="password">
 			<!-- Este es el token para que no tener problemas con CSRF -->
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 

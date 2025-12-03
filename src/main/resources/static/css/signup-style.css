@@ -1,0 +1,22 @@
+form {
+    display: grid;
+    width: 400px
+}
+
+.form-box {
+    border-radius:100px /500px;
+    background-color: whitesmoke;
+    background-image: linear-gradient(whitesmoke, slategrey);
+    width:500px;
+    background-color: red;
+    padding: 20px;
+    border-color: #000010;
+    border-width: 2px;
+    border-style: solid;
+    display: flex;
+    justify-content: center;
+}
+.signup-box {
+    height:800px;
+    grid-template-rows: auto auto auto auto auto auto auto auto auto;
+}
