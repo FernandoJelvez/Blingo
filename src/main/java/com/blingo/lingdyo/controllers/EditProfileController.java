@@ -45,13 +45,19 @@ public class EditProfileController {
                 && userRepository.existsByUsername(updatedUser.getUsername())) {
             model.addAttribute("error", "Username already exists.");
             return "my/profile/edit";}
-        else if(dbUser.getUsername().equals(updatedUser.getUsername())){
-            log.info("The user "+dbUser.getUsername()+" has changed his username to "+updatedUser.getUsername()+".");
+        else if(!dbUser.getUsername().equals(updatedUser.getUsername())){
+            log.warn("The user "+dbUser.getUsername()+" has changed his username to "+updatedUser.getUsername()+".");
         }
+        if(!dbUser.compareEditableDetails(updatedUser)){
+            String user;
+            if(dbUser.getUsername().equals(updatedUser.getUsername()))
+                {user = dbUser.getUsername();}
+            else
+                {user = updatedUser.getUsername();}
+            log.info("User "+user+" has updated his profile information.");}
         // === Actualización normal (sin recrear el usuario) ===
         updateUser(dbUser,updatedUser);
         userDetails.updateUser(dbUser);
-        log.info("User "+dbUser.getUsername()+" has updated his profile information.");
         return "redirect:/my/profile";
     }
     public void updateUser(User user, User updatedUser){
