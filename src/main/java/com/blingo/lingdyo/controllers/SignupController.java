@@ -30,6 +30,6 @@ public class SignupController {
             return mav;
         }
 
-        return new ModelAndView("successRegister", "user", user);
+        return new ModelAndView("login");
     }
 }
