@@ -2,7 +2,7 @@ package com.blingo.lingdyo.controllers;
 
 import com.blingo.lingdyo.User;
 import com.blingo.lingdyo.CustomUserDetails;
-import com.blingo.lingdyo.repositories.UserRepository;
+import com.blingo.lingdyo.repositories.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MyProfileController {
-
     private final UserRepository userRepository;
+    private final CourseRepository courseRepository;
 
-    public MyProfileController(UserRepository userRepository) {
+    public MyProfileController(UserRepository userRepository,
+                               CourseRepository courseRepository) {
         this.userRepository = userRepository;
+        this.courseRepository = courseRepository;
     }
 
     @GetMapping("/my/profile")
@@ -42,10 +44,12 @@ public class MyProfileController {
 
         Integer id = userDetails.getUser().getId();
 
+        // Borrar cursos del usuario
+        courseRepository.deleteByUserId(id);
+
         // Borrar usuario
         userRepository.deleteById(id);
 
-        // Redirigir a logout para limpiar sesión
         return "redirect:/";
     }
 }
