@@ -3,6 +3,7 @@ package com.blingo.lingdyo.controllers;
 import com.blingo.lingdyo.Course;
 import com.blingo.lingdyo.CustomUserDetails;
 import com.blingo.lingdyo.services.CourseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class CreateCoursesController {
+    @Autowired CourseService courseService;
+
     @GetMapping("/create/course")
     public String showCreateCoursesPage(Model model) {
         Course course = new Course();
@@ -22,7 +25,6 @@ public class CreateCoursesController {
     }
     @PostMapping("/create/course")
     public ModelAndView createCourse(@ModelAttribute("course") Course course, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        CourseService courseService = new CourseService();
         try{
             courseService.addCourse(course, userDetails.getUsername());
         } catch (Exception e) {
