@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <!-- Appender para registrar todos los logs en consola -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss} %-5level %logger - %msg%n</pattern>
         </encoder>
     </appender>
-
-    <appender name="MY_APP_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/CustomLogs.log</file>
+    <!-- Appender para logs generales, sin contar los custom -->
+    <appender name="GENERAL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/general.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/CustomLogs-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>logs/general-%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>7</maxHistory>
         </rollingPolicy>
 
@@ -18,13 +19,27 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%level] %logger - %msg%n</pattern>
         </encoder>
     </appender>
+    <!-- Appender para logs custom -->
+    <appender name="CUSTOM" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/custom.log</file>
 
-    <logger name="com.blingo.lingdyo.custom" level="INFO" additivity="false">
-        <appender-ref ref="MY_APP_LOG"/>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/customLogs-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%level] com.blingo.lingdyo.%msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="customLogs" level="INFO" additivity="false">
+        <appender-ref ref="CUSTOM"/>
+        <appender-ref ref="CONSOLE"/>
     </logger>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="GENERAL"/>
     </root>
 
 </configuration>

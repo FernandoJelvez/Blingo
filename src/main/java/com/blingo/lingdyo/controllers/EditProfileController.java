@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@Slf4j(topic = "com.blingo.lingdyo.custom")
+@Slf4j(topic = "customLogs")
 @Controller
 public class EditProfileController {
     @Autowired
@@ -46,10 +46,10 @@ public class EditProfileController {
             model.addAttribute("error", "Username already exists.");
             return "my/profile/edit";}
         else if(!dbUser.getUsername().equals(updatedUser.getUsername())){
-            log.warn("The user "+dbUser.getUsername()+" has changed his username to "+updatedUser.getUsername()+".");
+            log.warn("controllers.EditProfileController - The user "+dbUser.getUsername()+" has changed his username to "+updatedUser.getUsername()+".");
         }
         if(!dbUser.compareEditableDetails(updatedUser)){
-            log.info("User "+updatedUser.getUsername()+" has updated his profile information.");}
+            log.info("controllers.EditProfileController - User "+updatedUser.getUsername()+" has updated his profile information.");}
         // === Actualización normal (sin recrear el usuario) ===
         updateUser(dbUser,updatedUser);
         userDetails.updateUser(dbUser);
