@@ -209,7 +209,6 @@
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         </form>
     </div>
-    </div>
     <div class="sidebar">
         <header class="language-banner alan-sans-title"><p>Current language: None</p><hr style="border-color: #0D9C92" /></header>
         <div class="board">
@@ -221,6 +220,7 @@
                 <p id="username" style="margin: 50px;" th:text="${username}">"</p>
             </div></a>
         </div>
+    </div>
     </div>
     <script>
         window.onload = async function() {
