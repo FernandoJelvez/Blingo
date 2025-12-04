@@ -49,12 +49,7 @@ public class EditProfileController {
             log.warn("The user "+dbUser.getUsername()+" has changed his username to "+updatedUser.getUsername()+".");
         }
         if(!dbUser.compareEditableDetails(updatedUser)){
-            String user;
-            if(dbUser.getUsername().equals(updatedUser.getUsername()))
-                {user = dbUser.getUsername();}
-            else
-                {user = updatedUser.getUsername();}
-            log.info("User "+user+" has updated his profile information.");}
+            log.info("User "+updatedUser.getUsername()+" has updated his profile information.");}
         // === Actualización normal (sin recrear el usuario) ===
         updateUser(dbUser,updatedUser);
         userDetails.updateUser(dbUser);
