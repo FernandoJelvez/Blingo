@@ -1,10 +1,13 @@
 package com.blingo.lingdyo.controllers;
 
 import com.blingo.lingdyo.User;
+import com.blingo.lingdyo.exceptions.RepeatedUserInfoException;
 import com.blingo.lingdyo.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,14 +25,29 @@ public class SignupController {
     }
     @PostMapping("/signup")
     public ModelAndView signup(@ModelAttribute("user") @Valid User user) {
-        try {
-            userService.registerNewUserAccount(user);
-        } catch (Exception e) {
-            ModelAndView mav = new ModelAndView("signup");
-            mav.addObject("message", "An error has occurred, please contact an administrator");
-            return mav;
+        if (userService.usernameExists(user.getUsername())){
+            throw new RepeatedUserInfoException("username: repeated username",user);
+        } else if (userService.emailExists(user.getEmail())) {
+            throw new RepeatedUserInfoException("email: repeated username",user);
         }
+        userService.registerNewUserAccount(user);
 
         return new ModelAndView("login");
+    }
+    @ExceptionHandler
+    public ModelAndView handleMethodArgumentNotValidException(MethodArgumentNotValidException error){
+        User user = (User) error.getModel().get("user");
+        ModelAndView mav = new ModelAndView("signup");
+        mav.addObject("user",user);
+        mav.addObject("error",error.getDetailMessageArguments()[1]);
+        return mav;
+    }
+    @ExceptionHandler
+    public ModelAndView handleRepeatedUserInfoException(RepeatedUserInfoException error){
+        User user = error.getUser();
+        ModelAndView mav = new ModelAndView("signup");
+        mav.addObject("user",user);
+        mav.addObject("error",error.getMessage());
+        return mav;
     }
 }
