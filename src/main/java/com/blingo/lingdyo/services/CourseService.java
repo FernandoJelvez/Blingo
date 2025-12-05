@@ -34,7 +34,7 @@ public class CourseService implements ICourseService {
                     .map(Language::getName)
                     .orElse("Unknown");
             result.add(new CourseDto(
-                    c.getUserId().toString(),
+                    userRepository.findById(c.getUserId()).orElseThrow().getName(),
                     c.getName(),
                     c.getLikes(),
                     c.getLevel(),
@@ -58,7 +58,7 @@ public class CourseService implements ICourseService {
                     .orElse("Unknown");
 
             result.add(new CourseDto(
-                    c.getUserId().toString(),
+                    userRepository.findById(c.getUserId()).orElseThrow().getName(),
                     c.getName(),
                     c.getLikes(),
                     c.getLevel(),
