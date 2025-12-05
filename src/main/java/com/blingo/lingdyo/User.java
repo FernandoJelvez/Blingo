@@ -1,6 +1,7 @@
 package com.blingo.lingdyo;
 
 import com.blingo.lingdyo.annotations.ValidEmail;
+import com.blingo.lingdyo.annotations.ValidUsername;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,6 +10,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @ValidUsername
     private String username;
     private String pswd;
     private String name;
