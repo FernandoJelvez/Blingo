@@ -19,4 +19,14 @@ public class UserService implements IUserService {
         user.setPswd(encoder.encode(user.getPswd()));
         userRepository.save(user);
     }
+
+    @Override
+    public boolean usernameExists(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
+    @Override
+    public boolean emailExists(String email) {
+        return userRepository.findByUsername(email).isPresent();
+    }
 }
