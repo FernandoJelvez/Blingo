@@ -17,8 +17,6 @@ class CourseServiceTest {
     CourseService service;
     @Mock
     UserRepository userRepository;
-    @Mock
-    UsersCoursesRepository usersCoursesRepository;
     @Test //Course services obtiene un arreglo no nulo de Cursos
     void getUserCourses_ReturnsArray() {
         User u = new User();

@@ -50,4 +50,10 @@ public class User {
 
     public String getNative_tonge() { return native_tonge; }
     public void setNative_tonge(String native_tonge) { this.native_tonge = native_tonge; }
+
+    public boolean compareEditableDetails(User other) {
+        return this.name.equals(other.name) && this.lastname.equals(other.lastname) &&
+                this.email.equals(other.email) && this.age.equals(other.age) &&
+                this.native_tonge.equals(other.native_tonge);
+    }
 }
