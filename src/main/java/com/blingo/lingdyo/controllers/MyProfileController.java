@@ -49,7 +49,7 @@ public class MyProfileController {
         courseRepository.deleteByUserId(id);
         // Borrar usuario
         userRepository.deleteById(id);
-        log.warn("controllers.SignupController - The user "+name+" has been deleted from the db.");
+        log.warn("controllers.MyProfileController - The user '"+name+"' has been deleted from the db.");
 
         return "redirect:/";
     }

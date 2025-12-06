@@ -40,7 +40,7 @@ public class SignupController {
         }
         userService.registerNewUserAccount(user);
         if(userRepository.existsByUsername(user.getUsername())){
-            log.warn("controllers.SignupController - The user "+user.getUsername()+" has been registered");
+            log.warn("controllers.SignupController - The user '"+user.getUsername()+"' has been registered");
         }
 
         return new ModelAndView("login");
