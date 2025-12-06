@@ -3,6 +3,7 @@ package com.blingo.lingdyo.controllers;
 import com.blingo.lingdyo.User;
 import com.blingo.lingdyo.CustomUserDetails;
 import com.blingo.lingdyo.repositories.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@Slf4j(topic = "customLogs")
 @Controller
 public class MyProfileController {
     private final UserRepository userRepository;
@@ -41,14 +43,13 @@ public class MyProfileController {
 
     @PostMapping("/my/profile/delete")
     public String deleteAccount(@AuthenticationPrincipal CustomUserDetails userDetails) {
-
         Integer id = userDetails.getUser().getId();
-
+        String name = userDetails.getUsername();
         // Borrar cursos del usuario
         courseRepository.deleteByUserId(id);
-
         // Borrar usuario
         userRepository.deleteById(id);
+        log.warn("controllers.SignupController - The user "+name+" has been deleted from the db.");
 
         return "redirect:/";
     }
