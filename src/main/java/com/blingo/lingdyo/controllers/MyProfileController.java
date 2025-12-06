@@ -37,7 +37,9 @@ public class MyProfileController {
         if (user != null && description != null) {
             user.setDescription(description.trim());
             userRepository.save(user);
-            userDetails.setDescription(description);}
+            userDetails.setDescription(description);
+            log.info("controllers.MyProfileController - The user '"+user.getUsername()+"' has been changed his description.");
+        }
         return "redirect:/my/profile";
     }
 
