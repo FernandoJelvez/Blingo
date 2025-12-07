@@ -15,6 +15,8 @@ public class WebSecurityConfig {
     private LoginSuccessHandler loginSuccessHandler;
     @Autowired
     private LoginFailureHandler loginFailureHandler;
+    @Autowired
+    private CustomLogoutSuccessHandler logoutSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -33,7 +35,7 @@ public class WebSecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessHandler(logoutSuccessHandler)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
