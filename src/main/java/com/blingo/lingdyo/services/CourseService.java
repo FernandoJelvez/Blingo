@@ -88,7 +88,7 @@ public class CourseService implements ICourseService {
                     c.getLikes(),
                     c.getLevel(),
                     language,
-                    false // 🔥 No existe inscripción
+                    false //
             ));
         }
 
