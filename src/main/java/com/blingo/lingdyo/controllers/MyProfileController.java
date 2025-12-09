@@ -36,7 +36,12 @@ public class MyProfileController {
 
         if (user != null && description != null) {
             user.setDescription(description.trim());
-            userRepository.save(user);
+            try {
+                userRepository.save(user);
+            } catch (Exception e) {
+                log.error("controllers.MyProfileController - ERROR updating description for user '{}'. Exception: {}",
+                        user.getUsername(), e.getMessage(), e);
+            }
             userDetails.setDescription(description);
             log.info("controllers.MyProfileController - The user '"+user.getUsername()+"' has been changed his description.");
         }
@@ -47,12 +52,15 @@ public class MyProfileController {
     public String deleteAccount(@AuthenticationPrincipal CustomUserDetails userDetails) {
         Integer id = userDetails.getUser().getId();
         String name = userDetails.getUsername();
-        // Borrar cursos del usuario
-        courseRepository.deleteByUserId(id);
-        // Borrar usuario
-        userRepository.deleteById(id);
-        log.warn("controllers.MyProfileController - The user '"+name+"' has been deleted from the db.");
-
+        try {
+            courseRepository.deleteByUserId(id);
+            userRepository.deleteById(id);
+            log.warn("controllers.MyProfileController - The user '"+name+"' has been deleted from the db.");
+        } catch (Exception e) {
+            log.error("controllers.MyProfileController - ERROR deleting account for user '{}'. Exception: {}",
+                    name, e.getMessage(), e);
+            return "redirect:/my/profile?error";
+        }
         return "redirect:/";
     }
 }
