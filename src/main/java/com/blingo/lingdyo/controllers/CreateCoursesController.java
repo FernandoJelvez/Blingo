@@ -19,8 +19,9 @@ public class CreateCoursesController {
     @Autowired CourseService courseService;
 
     @GetMapping("/create/course")
-    public String showCreateCoursesPage(Model model) {
+    public String showCreateCoursesPage(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
         Course course = new Course();
+        model.addAttribute("username",userDetails.getUsername());
         model.addAttribute("course",course);
         System.out.println("create course");
         return "/create/course";
