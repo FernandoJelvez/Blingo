@@ -83,7 +83,7 @@ public class CourseService implements ICourseService {
                     .orElse("Unknown");
 
             result.add(new CourseWithEnrollingStateDto(
-                    c.getUserId().toString(),
+                    userRepository.findById(c.getUserId()).orElseThrow().getName(),
                     c.getName(),
                     c.getLikes(),
                     c.getLevel(),
