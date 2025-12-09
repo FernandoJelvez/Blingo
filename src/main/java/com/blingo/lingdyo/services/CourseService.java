@@ -2,17 +2,20 @@ package com.blingo.lingdyo.services;
 
 import com.blingo.lingdyo.Course;
 import com.blingo.lingdyo.Language;
+import com.blingo.lingdyo.User;
 import com.blingo.lingdyo.dtos.CourseDto;
 import com.blingo.lingdyo.dtos.CourseWithEnrollingStateDto;
 import com.blingo.lingdyo.repositories.CourseRepository;
 import com.blingo.lingdyo.repositories.LanguageRepository;
 import com.blingo.lingdyo.repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j(topic = "customLogs")
 @Service
 public class CourseService implements ICourseService {
     @Autowired
@@ -24,6 +27,11 @@ public class CourseService implements ICourseService {
 
     @Override
     public CourseDto[] getUserCourses(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> {
+                    log.error("services.CourseService - ERROR: User '{}' not found while obtaining user courses.", username);
+                    return new RuntimeException("User not found");
+                });
         Integer userId = userRepository.findByUsername(username)
                 .orElseThrow().getId();
         List<Course> courses = courseRepository.findByUserId(userId);
@@ -32,7 +40,11 @@ public class CourseService implements ICourseService {
 
             String language = languageRepository.findById(c.getLanguage_id())
                     .map(Language::getName)
-                    .orElse("Unknown");
+                    .orElseGet(() -> {
+                        log.error("services.CourseService - ERROR: Language ID {} not found for course '{}'.",
+                                c.getLanguage_id(), c.getName());
+                        return "Unknown";
+                    });
             result.add(new CourseDto(
                     userRepository.findById(c.getUserId()).orElseThrow().getName(),
                     c.getName(),
