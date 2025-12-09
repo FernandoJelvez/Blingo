@@ -46,7 +46,7 @@ public class CourseService implements ICourseService {
                         return "Unknown";
                     });
             result.add(new CourseDto(
-                    userRepository.findById(c.getUserId()).orElseThrow().getName(),
+                    userRepository.findById(c.getUserId()).orElseThrow().getUsername(),
                     c.getName(),
                     c.getLikes(),
                     c.getLevel(),
@@ -70,7 +70,7 @@ public class CourseService implements ICourseService {
                     .orElse("Unknown");
 
             result.add(new CourseDto(
-                    userRepository.findById(c.getUserId()).orElseThrow().getName(),
+                    userRepository.findById(c.getUserId()).orElseThrow().getUsername(),
                     c.getName(),
                     c.getLikes(),
                     c.getLevel(),
@@ -95,7 +95,7 @@ public class CourseService implements ICourseService {
                     .orElse("Unknown");
 
             result.add(new CourseWithEnrollingStateDto(
-                    c.getUserId().toString(),
+                    userRepository.findById(c.getUserId()).orElseThrow().getUsername(),
                     c.getName(),
                     c.getLikes(),
                     c.getLevel(),
