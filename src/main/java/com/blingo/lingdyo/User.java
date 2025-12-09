@@ -4,6 +4,8 @@ import com.blingo.lingdyo.annotations.ValidEmail;
 import com.blingo.lingdyo.annotations.ValidUsername;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -20,6 +22,19 @@ public class User {
     @ValidEmail
     private String email;
     private String native_tonge;
+    @JoinTable(
+            name = "users_courses",
+            joinColumns = @JoinColumn(
+                    name = "user_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "course_id",
+                    referencedColumnName = "id"
+            )
+    )
+    @OneToMany
+    private List<Course> courses;
 
     public User() {}
 
@@ -50,6 +65,13 @@ public class User {
 
     public String getNative_tonge() { return native_tonge; }
     public void setNative_tonge(String native_tonge) { this.native_tonge = native_tonge; }
+
+    public List<Course> getCourses(){
+        return courses;
+    }
+    public void setCourses(List<Course> courses){
+        this.courses = courses;
+    }
 
     public boolean compareEditableDetails(User other) {
         return this.name.equals(other.name) && this.lastname.equals(other.lastname) &&

@@ -93,14 +93,14 @@ public class CourseService implements ICourseService {
             String language = languageRepository.findById(c.getLanguage_id())
                     .map(Language::getName)
                     .orElse("Unknown");
-
+            boolean isEnrolled= userRepository.findByUsername(username).orElseThrow().getCourses().contains(c);
             result.add(new CourseWithEnrollingStateDto(
                     userRepository.findById(c.getUserId()).orElseThrow().getUsername(),
                     c.getName(),
                     c.getLikes(),
                     c.getLevel(),
                     language,
-                    false //
+                    isEnrolled
             ));
         }
 
