@@ -32,11 +32,15 @@ public class EditProfileController {
         // Buscar por ID (el id real que no cambia)
         User dbUser = userRepository.findById(userDetails.getUser().getId()).orElse(null);
         if (dbUser == null) {
+            log.error("controllers.EditProfileController - ERROR: User ID {} not found in database.",
+                    userDetails.getUser().getId());
             model.addAttribute("error", "User not found.");
             return "my/profile/edit";
         }
         // Validación de email
         if (updatedUser.getEmail() != null && !updatedUser.getEmail().contains("@")) {
+            log.error("controllers.EditProfileController - ERROR: Invalid email '{}' provided by user '{}'.",
+                    updatedUser.getEmail(), userDetails.getUsername());
             model.addAttribute("error", "Invalid email.");
             return "my/profile/edit";
         }
