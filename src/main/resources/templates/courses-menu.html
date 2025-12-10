@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="us">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lingdyo</title>
+    <link rel="stylesheet" th:href="@{css/core-style.css}">
+    <link rel="stylesheet" th:href="@{css/courses-style.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Alan+Sans&amp;family=Inconsolata:wght@200..900&amp;display=swap" rel="stylesheet">
+</head>
+<body>
+<nav class="top-nav">
+    <ul>
+        <li class="navbar-element alan-sans-title"><a href="/my/home">Home</a></li>
+        <li class="navbar-element alan-sans-title current-page"><a href="/courses-menu">Courses</a></li>
+        <li class="navbar-element alan-sans-title"><a href="/dictionary">Dictionary</a></li>
+        <li class="navbar-element alan-sans-title" style="float: right;"><a href="/about">About</a></li>
+    </ul>
+</nav>
+<div class="content">
+    <div class="main-content">
+        <h1 class="alan-sans-title" style="color: #11467F;">Welcome to Lingdyo</h1>
+        <p class="inconsolata-body">Available Courses</p>
+        <div id="courses-list">
+        </div>
+    </div>
+    <div class="sidebar">
+        <header class="language-banner alan-sans-title"><p>Current language: None</p><hr style="border-color: #0D9C92" /></header>
+        <div class="board">
+            <h3 class="alan-sans-title" style="color:#000020">Nothing to show yet</h3>
+        </div>
+        <div class="profile-box" style="">
+            <a class="alan-sans-title profile-link" href="/login"><div>
+                <img th:src="@{images/no_user.png}" height="144px" width="144px">
+                <p style="margin: 50px;">Log in / Sign up</p>
+            </div></a>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    window.onload = async function() {
+        await loadCoursesCapsules();
+    }
+
+    async function loadCoursesCapsules() {
+        var courses;
+        var usernameParagraph = document.getElementById("username")
+        const url = "/available_courses";
+        try {
+            const response = await fetch(url);
+            if(!response.ok){
+                throw new Error(`Response status: ${response.status}`);
+            }
+            const result = await response.json();
+            for (var i = 0; i<result.length; i++){
+                var r = result[i];
+                addCourseCapsule(r.creator,r.name,r.likes,r.level,r.language,false);
+            }
+        } catch(error) {
+            console.log(error.message);
+        }
+    }
+    function addCourseCapsule(creator,name,likes,level,language,is_enrolled){
+        var enrolledCoursesList = document.getElementById('courses-list');
+        var courseCapsule = document.createElement("div");
+        var courseCapsuleClass = document.createAttribute("class");
+        var header = document.createElement("header");
+        var headerClass = document.createAttribute("class");
+        var courseTitle = document.createElement("h1");
+        var courseTitleClass = document.createAttribute("class");
+        var likesText = document.createElement("h4");
+        var likesTextClass = document.createAttribute("class");
+        var creatorFooter = document.createElement("footer");
+        var creatorFooterClass = document.createAttribute("class");
+        var creatorFooterStyle = document.createAttribute("style");
+
+        courseCapsuleClass.value = "content-capsule";
+        courseCapsule.setAttributeNode(courseCapsuleClass);
+
+        headerClass.value = "inconsolata-body";
+        header.setAttributeNode(headerClass);
+        header.textContent =  language + " - " + level;
+
+        courseTitleClass.value = "alan-sans-title";
+        courseTitle.setAttributeNode(courseTitleClass);
+        courseTitle.textContent = name;
+
+        likesTextClass.value = "inconsolata-body";
+        likesText.setAttributeNode(likesTextClass);
+        likesText.textContent = likes + " Likes"
+
+        creatorFooterClass.value = "inconsolata-body";
+        creatorFooterStyle.value = "float: right; margin-top: 10px"
+        creatorFooter.setAttributeNode(creatorFooterClass);
+        creatorFooter.setAttributeNode(creatorFooterStyle);
+        creatorFooter.textContent = "Created by: " + creator;
+
+        courseCapsule.append(header);
+        courseCapsule.append(courseTitle);
+        courseCapsule.append(likesText);
+        courseCapsule.append(creatorFooter);
+        enrolledCoursesList.append(courseCapsule);
+    }
+</script>
+</html>
