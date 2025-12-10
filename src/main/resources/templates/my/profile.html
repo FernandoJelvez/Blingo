@@ -237,6 +237,7 @@
                 if (form.style.display === 'none') {
                     form.style.display = 'block';
                     btn.style.display = 'none';
+                    input.setAttribute("maxlength",100)
                     input.value = text.textContent.trim();
                 } else {
                     form.style.display = 'none';
