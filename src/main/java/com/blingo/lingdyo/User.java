@@ -5,6 +5,7 @@ import com.blingo.lingdyo.annotations.ValidUsername;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -74,8 +75,12 @@ public class User {
     }
 
     public boolean compareEditableDetails(User other) {
-        return this.name.equals(other.name) && this.lastname.equals(other.lastname) &&
-                this.email.equals(other.email) && this.age.equals(other.age) &&
-                this.native_tonge.equals(other.native_tonge);
+        if (other == null) return false;
+
+        return Objects.equals(name, other.name) &&
+                Objects.equals(lastname, other.lastname) &&
+                Objects.equals(email, other.email) &&
+                Objects.equals(age, other.age) &&
+                Objects.equals(native_tonge, other.native_tonge);
     }
 }

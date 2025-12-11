@@ -30,7 +30,8 @@ public class CreateCoursesController {
     public ModelAndView createCourse(@ModelAttribute("course") Course course, @AuthenticationPrincipal CustomUserDetails userDetails) {
         try{
             courseService.addCourse(course, userDetails.getUsername());
-            log.warn("configuration.CreateCoursesController - The course of '"+userDetails.getUsername()+"' has been registered as '"+course.getName()+"'.");
+            log.warn("configuration.CreateCoursesController - The course of '"+userDetails.getUsername()
+                    +"' has been registered as '"+course.getName()+"'.");
         } catch (Exception e) {
             log.error("controllers.CreateCoursesController - ERROR creating course for user '{}'. Exception: {}",
                     userDetails.getUsername(), e.getMessage(), e);

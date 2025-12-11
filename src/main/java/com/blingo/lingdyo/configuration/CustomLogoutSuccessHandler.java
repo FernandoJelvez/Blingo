@@ -15,13 +15,11 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication) throws java.io.IOException {
-
         String username = (authentication != null) ? authentication.getName() : "Unknown";
         String ip = request.getRemoteAddr();
 
         log.info("configuration.CustomLogoutSuccessHandler - LOGOUT SUCCESS: User '{}' from IP {}", username, ip);
 
-        // Redirigir al index
         response.sendRedirect("/");
     }
 }
